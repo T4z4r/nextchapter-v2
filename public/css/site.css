@@ -1,4 +1,4 @@
-
+﻿
 :root{
   --ink:#17242E;          /* deep pine, primary text/brand dark */
   --pine:#2C7CB8;         /* pine mid */
@@ -71,10 +71,6 @@ header.scrolled{border-color:var(--line);box-shadow:0 4px 20px rgba(23,36,46,.05
 @media(max-width:640px){.bp-logo{height:30px}}
 .foot-logo{height:82px;width:auto;display:block;margin:0 0 22px;opacity:.95}
 .muted-note{font-size:14.5px;color:var(--muted);border-left:2px solid var(--brand-cyan);padding-left:12px;margin-top:10px}
-.step ul{list-style:none;margin:10px 0 0;display:flex;flex-direction:column;gap:7px}
-.step li{display:flex;gap:9px;font-size:15px;line-height:1.5;color:var(--ink)}
-.step li::before{content:"";width:5px;height:5px;flex:none;margin-top:8px;border-radius:50%;background:var(--brand-cyan)}
-.step p{font-size:15.5px;line-height:1.55}
 /* ---------- hero ---------- */
 .hero{position:relative;overflow:hidden;padding:70px 0 40px}
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
@@ -114,41 +110,48 @@ section{padding:92px 0}
 .band-dark .eyebrow{color:var(--sage-soft)}
 .band-paper2{background:var(--paper-2)}
 
-/* ---------- how it works (real sequence â†’ numbers earn their place) ---------- */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.step.hero-step{background:var(--ink);border-color:var(--pine)}
-.step.hero-step .num{color:var(--honey)}
+/* ---------- how it works (real sequence Ã¢â€ â€™ numbers earn their place) ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:step}
+.step{background:linear-gradient(180deg,#FFFFFF 0%,#F5FAFD 100%);border:1px solid #E2EDF4;border-radius:16px;padding:30px 26px 28px;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(23,36,46,.04),0 10px 26px rgba(23,36,46,.05);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.step::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--brand-grad);opacity:.45;filter:saturate(.45);transition:opacity .3s ease,filter .3s ease}
+.step::after{counter-increment:step;content:counter(step);position:absolute;right:-8px;bottom:-30px;font-family:'Spline Sans Mono';font-weight:700;font-size:110px;line-height:1;color:rgba(44,124,184,.07);pointer-events:none;transition:color .3s ease,transform .3s ease}
+.step:hover{transform:translateY(-6px);border-color:var(--honey);box-shadow:0 2px 6px rgba(23,36,46,.06),0 24px 48px rgba(23,36,46,.10)}
+.step:hover::before{opacity:1;filter:none}
+.step:hover::after{color:rgba(44,124,184,.14);transform:translateY(-6px)}
+.step .num{display:inline-flex;align-items:center;gap:9px;font-family:'Spline Sans Mono';font-size:12.5px;color:var(--honey-deep);font-weight:500;letter-spacing:.12em;text-transform:uppercase;position:relative;z-index:1;transition:color .25s ease,letter-spacing .25s ease}
+.step .num::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--brand-grad);flex:none}
+.step:hover .num{color:var(--pine);letter-spacing:.17em}
+.step h3{font-size:22px;margin:15px 0 10px;position:relative;z-index:1}
+.step p{font-size:15px;color:var(--muted);line-height:1.55;transition:color .25s ease;position:relative;z-index:1}
+.step:hover p{color:var(--ink)}
+.step ul{list-style:none;margin:12px 0 0;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+.step li{display:flex;gap:10px;font-size:14.5px;line-height:1.5;color:var(--ink)}
+.step li::before{content:"";width:6px;height:6px;flex:none;margin-top:8px;border-radius:50%;background:var(--brand-grad);opacity:.65;transition:transform .25s ease,opacity .25s ease}
+.step:hover li::before{transform:scale(1.45);opacity:1}
+.step .rule{height:2px;width:34px;background:var(--honey-tint);margin-top:auto;padding-top:0;border-radius:2px;transition:width .3s ease,background .3s ease;position:relative;z-index:1}
+.step .footnote-rule-gap{margin-top:14px}
+.step:hover .rule{width:100%;background:var(--brand-grad)}
+
+/* highlighted (active) step */
+.step.hero-step{background:radial-gradient(135% 150% at 88% -12%,#2C7CB8 0%,#173043 52%,#132532 100%);border-color:rgba(88,203,221,.35);box-shadow:0 1px 2px rgba(23,36,46,.2),0 14px 34px rgba(23,36,46,.18)}
+.step.hero-step::before{background:linear-gradient(90deg,#58CBDD,#459EDF);opacity:.9;filter:none}
+.step.hero-step::after{color:rgba(255,255,255,.07)}
+.step.hero-step:hover{border-color:rgba(88,203,221,.6);box-shadow:0 2px 6px rgba(23,36,46,.16),0 26px 56px rgba(44,124,184,.38)}
+.step.hero-step:hover::after{color:rgba(255,255,255,.13)}
+.step.hero-step .num{color:var(--honey-tint)}
+.step.hero-step .num::before{background:linear-gradient(90deg,#58CBDD,#CDE8F5)}
 .step.hero-step h3{color:#fff}
 .step.hero-step p{color:var(--sage-soft)}
+.step.hero-step:hover p{color:#DCEBF5}
 .step.hero-step .rule{background:var(--honey)}
-.step.hero-step .save{margin-top:14px;font-family:'Spline Sans Mono';font-size:12px;color:var(--honey-tint);letter-spacing:.03em}
-.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px 24px 26px;position:relative;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
-.step:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-
-/* --- How-it-works interactive hover --- */
-.step::before{content:"";position:absolute;top:0;left:0;height:3px;width:26%;border-radius:var(--r) 0 0;background:var(--brand-grad);opacity:.55;transition:width .3s ease,opacity .3s ease}
-.step:hover::before{width:100%;opacity:1}
-.step .num{transition:color .25s ease,letter-spacing .25s ease}
-.step li::before{transition:background-color .25s ease,transform .25s ease}
-.step .rule{transition:width .3s ease,background .3s ease}
-.step:hover{border-color:var(--honey)}
-.step:hover .num{color:var(--pine);letter-spacing:.16em}
-.step:hover li::before{background:var(--honey);transform:scale(1.45)}
-.step:hover p{color:var(--ink)}
-.step p{transition:color .25s ease}
-.step:hover .rule{width:100%;background:var(--brand-grad)}
-.step.hero-step::before{background:linear-gradient(90deg,#58CBDD,#459EDF);border-top-left-radius:var(--r)}
-.step.hero-step:hover{box-shadow:0 2px 6px rgba(23,36,46,.12),0 22px 54px rgba(44,124,184,.38);border-color:var(--honey)}
+.step.hero-step:hover .rule{width:100%;background:linear-gradient(90deg,#58CBDD,#459EDF)}
+.step.hero-step .save{margin-top:14px;font-family:'Spline Sans Mono';font-size:12px;color:var(--honey-tint);letter-spacing:.03em;position:relative;z-index:1}
 .step.hero-step:hover .num{color:#fff;letter-spacing:.18em}
-.step.hero-step:hover h3{text-shadow:0 1px 12px rgba(88,203,221,.35)}
-.step.hero-step p,.step.hero-step .save{transition:color .25s ease}
+.step.hero-step:hover h3{text-shadow:0 1px 14px rgba(88,203,221,.45)}
+.muted-note{margin-top:12px}
 @media (prefers-reduced-motion: reduce){
   .step,.step:hover{transform:none;transition:none}
 }
-.step .num{font-family:'Spline Sans Mono';font-size:13px;color:var(--honey-deep);font-weight:500;letter-spacing:.1em}
-.step h3{font-size:21px;margin:14px 0 9px}
-.step p{font-size:15px;color:var(--muted);line-height:1.55}
-.step .rule{height:2px;width:34px;background:var(--honey-tint);margin-top:16px;border-radius:2px}
 
 /* four pillars, settlement USP leads, then differentiator, then prep */
 .pillars{display:grid;gap:20px}
