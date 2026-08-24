@@ -122,8 +122,29 @@ section{padding:92px 0}
 .step.hero-step p{color:var(--sage-soft)}
 .step.hero-step .rule{background:var(--honey)}
 .step.hero-step .save{margin-top:14px;font-family:'Spline Sans Mono';font-size:12px;color:var(--honey-tint);letter-spacing:.03em}
-.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px 24px 26px;position:relative;transition:transform .2s,box-shadow .2s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px 24px 26px;position:relative;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
 .step:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+
+/* --- How-it-works interactive hover --- */
+.step::before{content:"";position:absolute;top:0;left:0;height:3px;width:26%;border-radius:var(--r) 0 0;background:var(--brand-grad);opacity:.55;transition:width .3s ease,opacity .3s ease}
+.step:hover::before{width:100%;opacity:1}
+.step .num{transition:color .25s ease,letter-spacing .25s ease}
+.step li::before{transition:background-color .25s ease,transform .25s ease}
+.step .rule{transition:width .3s ease,background .3s ease}
+.step:hover{border-color:var(--honey)}
+.step:hover .num{color:var(--pine);letter-spacing:.16em}
+.step:hover li::before{background:var(--honey);transform:scale(1.45)}
+.step:hover p{color:var(--ink)}
+.step p{transition:color .25s ease}
+.step:hover .rule{width:100%;background:var(--brand-grad)}
+.step.hero-step::before{background:linear-gradient(90deg,#58CBDD,#459EDF);border-top-left-radius:var(--r)}
+.step.hero-step:hover{box-shadow:0 2px 6px rgba(23,36,46,.12),0 22px 54px rgba(44,124,184,.38);border-color:var(--honey)}
+.step.hero-step:hover .num{color:#fff;letter-spacing:.18em}
+.step.hero-step:hover h3{text-shadow:0 1px 12px rgba(88,203,221,.35)}
+.step.hero-step p,.step.hero-step .save{transition:color .25s ease}
+@media (prefers-reduced-motion: reduce){
+  .step,.step:hover{transform:none;transition:none}
+}
 .step .num{font-family:'Spline Sans Mono';font-size:13px;color:var(--honey-deep);font-weight:500;letter-spacing:.1em}
 .step h3{font-size:21px;margin:14px 0 9px}
 .step p{font-size:15px;color:var(--muted);line-height:1.55}
