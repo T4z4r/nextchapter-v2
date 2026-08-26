@@ -1,56 +1,96 @@
+@php
+  $hour = (int) now()->format('G');
+  $greeting = $hour < 12 ? 'Good morning' : ($hour < 17 ? 'Good afternoon' : 'Good evening');
+@endphp
+
 <x-admin-shell title="Dashboard">
-  <div class="card dash-intro">
-    <h2 style="margin:0 0 6px">Welcome back</h2>
-    <p style="color:#5A6B77;margin:0">
-      This panel controls every part of the public site — the copy in each section, how-it-works
-      steps, platform features, tutorials with video uploads, pricing packages and add-ons, FAQs,
-      brand logos &amp; colors, and global settings. Anything you change here appears on the site
-      immediately. Recent changes are tracked below so you can see what happened and when.
-    </p>
+  <div class="dash-hero">
+    <div class="dash-hero-body">
+      <h1>{{ $greeting }} <span class="wave">&#128075;</span></h1>
+      <p>Everything on the public site — copy, tutorials, pricing, branding — is managed from here.
+         Changes go live immediately and are tracked in the activity feed below.</p>
+      <a href="{{ route('home') }}" target="_blank" class="btn btn-primary"><x-ad-icon name="external"/>View live site</a>
+    </div>
+    <div class="dash-hero-art">
+      <div class="dash-hero-ring"></div>
+    </div>
   </div>
 
   <div class="stat-grid">
-    <div class="stat"><div class="n">{{ $totalMessages }}</div><div class="l">Enquiries &amp; checkout intents</div><div class="s">{{ $enquiries }} enquiries · {{ $intents }} intents</div></div>
-    <div class="stat{{ $unreadMessages ? ' stat-alert' : '' }}"><div class="n">{{ $unreadMessages }}</div><div class="l">Unread messages</div><div class="s">waiting for a reply</div></div>
-    <div class="stat"><div class="n">{{ $tutorials }}</div><div class="l">Tutorials published</div><div class="s">{{ $lockedTutorials }} locked · {{ $tutorials - $lockedTutorials }} free</div></div>
-    <div class="stat"><div class="n">{{ $plans }}</div><div class="l">Live packages</div><div class="s">{{ $addons }} active add-ons</div></div>
-    <div class="stat"><div class="n">{{ $faqs }}</div><div class="l">FAQs online</div><div class="s">shown on the public page</div></div>
+    <a href="{{ route('admin.messages.index') }}" class="stat{{ $unreadMessages ? ' stat-alert' : '' }}">
+      <span class="stat-ico"><x-ad-icon name="mail"/></span>
+      <div class="stat-body">
+        <div class="n">{{ $totalMessages }}</div>
+        <div class="l">Enquiries &amp; intents</div>
+        <div class="s">@if($unreadMessages)<strong>{{ $unreadMessages }} unread</strong> · @endif{{ $enquiries }} enquiry · {{ $intents }} intent{{ $intents !== 1 ? 's' : '' }}</div>
+      </div>
+    </a>
+
+    <a href="{{ route('admin.tutorials.index') }}" class="stat">
+      <span class="stat-ico"><x-ad-icon name="play"/></span>
+      <div class="stat-body">
+        <div class="n">{{ $tutorials }}</div>
+        <div class="l">Tutorials</div>
+        <div class="s">{{ $lockedTutorials }} locked · {{ $tutorials - $lockedTutorials }} free</div>
+      </div>
+    </a>
+
+    <a href="{{ route('admin.plans.index') }}" class="stat">
+      <span class="stat-ico"><x-ad-icon name="package"/></span>
+      <div class="stat-body">
+        <div class="n">{{ $plans }}</div>
+        <div class="l">Packages</div>
+        <div class="s">{{ $addons }} active add-on{{ $addons !== 1 ? 's' : '' }}</div>
+      </div>
+    </a>
+
+    <a href="{{ route('admin.faqs.index') }}" class="stat">
+      <span class="stat-ico"><x-ad-icon name="help"/></span>
+      <div class="stat-body">
+        <div class="n">{{ $faqs }}</div>
+        <div class="l">FAQs</div>
+        <div class="s">live on the public page</div>
+      </div>
+    </a>
   </div>
 
   <div class="dash-cols">
-    <div class="card">
+    <div class="card dash-activity">
       <h2>Recent activity</h2>
       @if($recent->isEmpty())
-        <p class="hint">No activity recorded yet. Changes you make across the admin will appear here.</p>
+        <p class="hint">No activity yet — edits you make will appear here in real time.</p>
       @else
-        <ul class="activity-feed">
+        <ul class="timeline">
           @foreach($recent as $log)
-            <li>
-              <span class="badge b-{{ $log->verbGroup() }}">{{ $log->verbGroup() }}</span>
-              <span class="a-body">
-                <span class="a-desc">{{ $log->description }}</span>
-                <span class="a-meta">
-                  {{ $log->user?->email ?? 'system' }}
-                  &middot; {{ $log->ago() }}
-                  @if($log->ip) &middot; {{ $log->ip }} @endif
+            <li class="tl-item">
+              <span class="tl-dot b-{{ $log->verbGroup() }}"></span>
+              <div class="tl-body">
+                <span class="tl-head">
+                  <span class="tl-desc">{{ $log->description }}</span>
+                  <span class="tl-time">{{ $log->ago() }}</span>
                 </span>
-              </span>
+                <span class="tl-meta">
+                  <span class="tl-avatar">{{ strtoupper(mb_substr($log->user?->name ?? $log->user?->email ?? 'sys', 0, 1)) }}</span>
+                  {{ $log->user?->name ?? $log->user?->email ?? 'System' }}
+                  @if($log->ip) <span class="tl-ip">{{ $log->ip }}</span> @endif
+                </span>
+              </div>
             </li>
           @endforeach
         </ul>
-        <p class="hint" style="margin-top:10px">Tracker covers content edits, settings changes, enquiries, checkout intents and admin sign-ins.</p>
+        <p class="hint" style="margin-top:12px">Tracks content edits, settings, enquiries, checkout intents &amp; admin sign-ins.</p>
       @endif
     </div>
 
-    <div class="card">
-      <h2>Quick links</h2>
-      <div class="quick-grid">
-        <a href="{{ route('admin.tutorials.index') }}"><x-ad-icon name="play"/>Tutorials<small>Add or update videos</small></a>
-        <a href="{{ route('admin.plans.index') }}"><x-ad-icon name="package"/>Packages<small>Edit pricing tiers</small></a>
-        <a href="{{ route('admin.messages.index') }}"><x-ad-icon name="mail"/>Enquiries<small>{{ $unreadMessages }} unread</small></a>
-        <a href="{{ route('admin.settings.edit') }}"><x-ad-icon name="sliders"/>Settings<small>Logos &amp; brand colors</small></a>
-        <a href="{{ route('admin.faqs.index') }}"><x-ad-icon name="help"/>FAQs<small>Answer common questions</small></a>
-        <a href="{{ route('home') }}" target="_blank"><x-ad-icon name="external"/>View site<small>See changes live</small></a>
+    <div class="dash-quick-wrap">
+      <h2 style="font-size:16px;margin:0 0 10px">Quick actions</h2>
+      <div class="dash-quick">
+        <a href="{{ route('admin.tutorials.create') }}" class="dq-card"><span class="dq-ico"><x-ad-icon name="play"/></span><span class="dq-text"><strong>Add tutorial</strong><small>Video + thumbnail</small></span></a>
+        <a href="{{ route('admin.faqs.create') }}" class="dq-card"><span class="dq-ico"><x-ad-icon name="help"/></span><span class="dq-text"><strong>Add FAQ</strong><small>Answer a question</small></span></a>
+        <a href="{{ route('admin.plans.create') }}" class="dq-card"><span class="dq-ico"><x-ad-icon name="package"/></span><span class="dq-text"><strong>Add package</strong><small>New pricing tier</small></span></a>
+        <a href="{{ route('admin.settings.edit') }}" class="dq-card"><span class="dq-ico"><x-ad-icon name="sliders"/></span><span class="dq-text"><strong>Brand settings</strong><small>Logos &amp; colors</small></span></a>
+        <a href="{{ route('admin.messages.index') }}" class="dq-card"><span class="dq-ico"><x-ad-icon name="mail"/></span><span class="dq-text"><strong>Enquiries</strong><small>{{ $unreadMessages }} unread</small></span></a>
+        <a href="{{ route('admin.steps.index') }}" class="dq-card"><span class="dq-ico"><x-ad-icon name="list"/></span><span class="dq-text"><strong>How-it-works</strong><small>Edit steps</small></span></a>
       </div>
     </div>
   </div>
