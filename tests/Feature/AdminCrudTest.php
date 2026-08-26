@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\ContactMessage;
 use App\Models\Faq;
 use App\Models\Plan;
+use App\Models\Setting;
 use App\Models\Step;
 use App\Models\Tutorial;
 use App\Models\User;
@@ -164,6 +165,72 @@ class AdminCrudTest extends TestCase
         $this->get('/')
             ->assertSee('office@nextchapter.uk')
             ->assertSee('Bristol, UK');
+    }
+
+    public function test_settings_brand_colors_and_logo_upload(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->admin())
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'color_primary' => 'FF5A00',
+                'color_deep' => '#2C7CB8',
+                'color_ink' => '#101010',
+                'logo' => UploadedFile::fake()->image('logo.png', 200, 60),
+            ])
+            ->assertSessionHas('success')
+            ->assertSessionHasNoErrors();
+
+        $setting = Setting::get();
+        $this->assertSame('#ff5a00', $setting->color_primary);
+        $this->assertSame('#2c7cb8', $setting->color_deep);
+        $this->assertSame('#101010', $setting->color_ink);
+        $this->assertNull($setting->color_accent);
+
+        $this->assertStringStartsWith('storage/brand/', $setting->logo_path);
+        Storage::disk('public')->assertExists(substr($setting->logo_path, strlen('storage/')));
+
+        $storedLogo = $setting->logo_path;
+
+        $home = $this->get('/');
+        $home->assertSee('--honey:#ff5a00', false);
+        $home->assertSee('--ink:#101010', false);
+        $this->assertStringNotContainsString('--brand-cyan:', $home->getContent());
+
+        // replace logo: old file deleted, new one stored
+        $this->actingAs($this->admin())
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'logo' => UploadedFile::fake()->image('logo2.png', 200, 60),
+            ])
+            ->assertSessionHas('success');
+
+        $setting = Setting::get();
+        $this->assertNotSame($storedLogo, $setting->logo_path);
+        Storage::disk('public')->assertMissing(substr($storedLogo, strlen('storage/')));
+
+        // remove checkbox clears the path and deletes the file
+        $currentFile = substr($setting->logo_path, strlen('storage/'));
+        $this->actingAs($this->admin())
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'remove_logo' => '1',
+            ])
+            ->assertSessionHas('success');
+
+        $this->assertNull(Setting::get()->logo_path);
+        Storage::disk('public')->assertMissing($currentFile);
+    }
+
+    public function test_settings_brand_color_validation_rejects_bad_hex(): void
+    {
+        $this->actingAs($this->admin())
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'color_primary' => 'not-a-color',
+            ])
+            ->assertSessionHasErrors('color_primary');
     }
 
     public function test_message_show_marks_read_and_delete_works(): void

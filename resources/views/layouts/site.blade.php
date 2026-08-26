@@ -12,6 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/site.css') }}">
 <link rel="stylesheet" href="{{ asset('css/extra.css') }}">
+@if($brandCss = $settings->palette())
+<style>{{ $brandCss }}</style>
+@endif
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body data-checkout-url="{{ route('checkout.intent') }}">
@@ -36,7 +39,7 @@
         <a href="{{ $header->cta1_url ?: '#pricing' }}" class="btn btn-primary">{{ $header->cta1_label }}</a>
       @endif
       <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#17242E" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="{{ $settings->color_ink ?: '#17242E' }}" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
       </button>
     </div>
   </div>

@@ -121,3 +121,5 @@ table.ad-table{width:100%;border-collapse:collapse}
 .tp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .tp-current-img{max-width:220px;border-radius:8px;border:1px solid #D7E3EC;margin-bottom:10px}
 .tp-current-video{max-width:280px;border-radius:8px;border:1px solid #D7E3EC;margin-bottom:10px}
+
+.brand-current{display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin-bottom:8px;max-width:280px}.brand-current img{max-height:56px;max-width:240px;object-fit:contain}.brand-current-dark{background:var(--ink);border-color:rgba(255,255,255,.15)}
