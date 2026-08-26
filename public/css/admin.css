@@ -127,20 +127,27 @@ table.ad-table{width:100%;border-collapse:collapse}
 .ad-nav a svg{width:16px;height:16px;flex:none;opacity:.72}.ad-nav a:hover svg,.ad-nav a.active svg{opacity:1}.ad-nav a.active svg{stroke:#fff}
 .pw-wrap{position:relative}.pw-wrap input{padding-right:44px}.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:7px;cursor:pointer;color:#5A6B77;display:flex;border-radius:7px;line-height:0}.pw-toggle:hover{color:#17242E;background:rgba(23,36,46,.06)}.pw-toggle svg{width:16px;height:16px}
 
-.dropzone{position:relative;border:2px dashed var(--ad-line);border-radius:12px;padding:20px 16px;text-align:center;background:#FBFDFE;cursor:pointer;transition:border-color .2s ease,background .2s ease,box-shadow .2s ease;margin-top:4px}
-.dropzone:hover,.dropzone:focus-visible{border-color:var(--ad-blue);outline:none}
-.dropzone.dz-over{border-color:var(--ad-honey);border-style:solid;background:#FFF8EE;box-shadow:0 6px 18px rgba(196,137,46,.15)}
+.dropzone{position:relative;border:2px dashed #D2DEE7;border-radius:14px;padding:28px 20px;text-align:center;background:linear-gradient(180deg,#FAFCFE 0%,#F4F8FB 100%);cursor:pointer;transition:border-color .2s ease,background .2s ease,box-shadow .2s ease,transform .15s ease;margin-top:4px}
+.dropzone:hover{border-color:var(--ad-blue);box-shadow:0 0 0 4px rgba(69,158,223,.08)}
+.dropzone:focus-visible{border-color:var(--ad-blue);outline:none;box-shadow:0 0 0 4px rgba(69,158,223,.12)}
+.dropzone.dz-over{border-color:var(--ad-honey);border-style:solid;background:linear-gradient(180deg,#FFFBF5 0%,#FFF5E6 100%);box-shadow:0 0 0 4px rgba(196,137,46,.12),0 8px 24px rgba(196,137,46,.1);transform:scale(1.01)}
+.dropzone.dz-has{border-style:solid;border-color:#E2EDF4;background:#fff;padding:16px}
 .dz-input{display:none}
-.dz-hint{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ad-mut);font-size:13px}
-.dz-hint svg{width:26px;height:26px;color:var(--ad-blue);margin-bottom:3px}
-.dz-title{font-weight:600;color:#33475A}
-.dz-sub{font-size:12px}
-.dz-file{display:flex;align-items:center;gap:10px;margin-top:12px;padding:8px 10px;background:#fff;border:1px solid var(--ad-line);border-radius:9px;font-size:13px;text-align:left}
-.dz-file img,.dz-file video{width:46px;height:46px;object-fit:cover;border-radius:6px;flex:none;background:#17242E}
-.dz-file .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;color:#33475A}
-.dz-file .s{color:var(--ad-mut);flex:none}
-.dz-clear{background:none;border:0;color:#B3402D;cursor:pointer;font-size:17px;line-height:1;padding:2px 7px;border-radius:6px}
-.dz-clear:hover{background:#FCEDEA}
+.dz-hint{display:flex;flex-direction:column;align-items:center;gap:6px}
+.dz-hint svg{width:32px;height:32px;color:var(--ad-blue);opacity:.55;transition:opacity .15s ease,transform .15s ease}
+.dropzone:hover .dz-hint svg{opacity:.85;transform:translateY(-2px)}
+.dz-title{font-weight:600;font-size:14px;color:#33475A}
+.dz-sub{font-size:12.5px;color:var(--ad-mut);margin-top:2px}
+.dz-accept{font-size:11px;color:#A0ADBA;margin-top:4px;font-family:'Spline Sans Mono'}
+.dz-file{display:flex;align-items:center;gap:14px;padding:6px 4px;text-align:left}
+.dz-file img,.dz-file video{width:54px;height:54px;object-fit:cover;border-radius:10px;flex:none;background:#17242E;border:2px solid #EEF3F7}
+.dz-file .n{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.dz-file .n span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dz-file .n .fname{font-size:13.5px;font-weight:600;color:#33475A}
+.dz-file .n .fsize{font-size:12px;color:var(--ad-mut)}
+.dz-file .s{display:none}
+.dz-clear{background:#FCEDEA;border:1px solid #F3CFC7;color:#B3402D;cursor:pointer;font-size:11px;font-weight:600;padding:6px 12px;border-radius:8px;transition:background .12s ease,color .12s ease;flex:none;white-space:nowrap}
+.dz-clear:hover{background:#B3402D;color:#fff;border-color:#B3402D}
 
 /* ── Dashboard ─────────────────────────────────────────────────────────── */
 .dash-hero{display:grid;grid-template-columns:1fr 200px;gap:24px;background:linear-gradient(135deg,#17242E 0%,#1E5A85 100%);border-radius:18px;padding:36px 40px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden}
