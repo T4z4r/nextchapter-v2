@@ -27,7 +27,7 @@
           @if($item->image_path)
             <img src="{{ $item->imageUrl() }}" alt="Current thumbnail" class="tp-current-img">
           @endif
-          <input id="image" type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif">
+          <x-dropzone name="image" label="Drop thumbnail image here" accept="image/png,image/jpeg,image/webp,image/gif"/>
           <span class="hint">JPG, PNG, WebP or GIF, up to 5 MB. Shown behind the play button.</span>
           @error('image')<span class="hint" style="color:#B3402D">{{ $message }}</span>@enderror
           @if($item->image_path)
@@ -43,7 +43,7 @@
             <video class="tp-current-video" src="{{ $item->videoUrl() }}" controls preload="metadata"></video>
             <span class="hint">Current: {{ basename($item->video_path) }}</span>
           @endif
-          <input id="video" type="file" name="video" accept="video/mp4,video/webm,video/ogg,video/quicktime">
+          <x-dropzone name="video" label="Drop video file here" accept="video/mp4,video/webm,video/ogg,video/quicktime"/>
           <span class="hint">MP4, WebM, OGG or MOV, up to 20 MB. Unlocked tutorials play it in a lightbox on the public site.</span>
           @error('video')<span class="hint" style="color:#B3402D">{{ $message }}</span>@enderror
           @if($item->video_path)

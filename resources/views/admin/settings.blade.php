@@ -32,7 +32,7 @@
             <input type="checkbox" name="remove_logo" value="1"> Remove current header logo
           </label>
         @endif
-        <input type="file" name="logo" accept=".png,.jpg,.jpeg,.webp,.svg,image/*">
+        <x-dropzone name="logo" label="Drop logo image here" accept=".png,.jpg,.jpeg,.webp,.svg,image/*"/>
         <span class="hint">PNG, JPG, WEBP or SVG, max 2&nbsp;MB. Replaces any current logo.</span>
       </div>
       <div class="field">
@@ -45,7 +45,7 @@
             <input type="checkbox" name="remove_footer_logo" value="1"> Remove current footer logo
           </label>
         @endif
-        <input type="file" name="footer_logo" accept=".png,.jpg,.jpeg,.webp,.svg,image/*">
+        <x-dropzone name="footer_logo" label="Drop footer logo here" accept=".png,.jpg,.jpeg,.webp,.svg,image/*"/>
         <span class="hint">Shown on the dark footer — a light/white version usually works best.</span>
       </div>
     </div>
