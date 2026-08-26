@@ -56,9 +56,8 @@
         media = '<video src="' + URL.createObjectURL(file) + '" muted preload="metadata"></video>';
       }
       box.innerHTML = media +
-        '<span class="n"></span><span class="s">' + humanSize(file.size) + '</span>' +
-        '<button type="button" class="dz-clear" aria-label="Remove selected file">&times;</button>';
-      box.querySelector('.n').textContent = file.name;
+        '<span class="n"><span class="fname">' + file.name + '</span><span class="fsize">' + humanSize(file.size) + '</span></span>' +
+        '<button type="button" class="dz-clear" aria-label="Remove selected file">Remove</button>';
       box.hidden = false;
       zone.classList.add('dz-has');
     }
