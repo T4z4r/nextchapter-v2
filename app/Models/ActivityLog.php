@@ -18,7 +18,7 @@ class ActivityLog extends Model
 
     public static function record(string $action, string $description, ?Model $subject = null): ?self
     {
-        if ($subject instanceof self) {
+        if ($subject instanceof self || request() === null) {
             return null;
         }
 

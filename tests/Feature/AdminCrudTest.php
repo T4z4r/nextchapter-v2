@@ -233,6 +233,41 @@ class AdminCrudTest extends TestCase
             ->assertSessionHasErrors('color_primary');
     }
 
+    public function test_activity_tracker_logs_auth_content_and_public_events(): void
+    {
+        $this->post(route('admin.login.attempt'), [
+            'email' => 'admin@nextchapter.uk',
+            'password' => 'ChangeMe!2026',
+        ]);
+        $this->assertDatabaseHas('activity_logs', ['action' => 'auth.login']);
+
+        $this->actingAs($this->admin())
+            ->post(route('admin.faqs.store'), [
+                'question' => 'Tracker test question?',
+                'answer' => '<p>Yes.</p>',
+            ])
+            ->assertRedirect();
+        $faq = Faq::query()->where('question', 'Tracker test question?')->first();
+
+        $this->assertDatabaseHas('activity_logs', [
+            'action' => 'faq.created',
+            'subject_id' => $faq->id,
+        ]);
+
+        $this->post(route('enquiries.store'), [
+            'name' => 'Site Visitor',
+            'email' => 'visitor@example.com',
+            'message' => 'Hello, I need help.',
+        ])->assertSessionHas('success');
+
+        $this->assertDatabaseHas('activity_logs', ['action' => 'contactmessage.created']);
+
+        $this->actingAs($this->admin())
+            ->delete(route('admin.faqs.destroy', $faq))
+            ->assertRedirect();
+        $this->assertDatabaseHas('activity_logs', ['action' => 'faq.deleted']);
+    }
+
     public function test_message_show_marks_read_and_delete_works(): void
     {
         $message = ContactMessage::query()->create([

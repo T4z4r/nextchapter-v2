@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Models\ActivityLog;
-use App\Models\Model;
 use App\Models\Setting;
+use Illuminate\Database\Eloquent\Model;
 
 class ContentObserver
 {
