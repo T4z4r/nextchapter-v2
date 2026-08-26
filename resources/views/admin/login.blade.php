@@ -29,7 +29,7 @@
           <input id="remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
           <label for="remember">Remember me</label>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><x-ad-icon name="login" style="width:15px;height:15px;margin-right:6px"/>Sign in</button>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><x-ad-icon name="login"/>Sign in</button>
       </form>
     </div>
   </div>

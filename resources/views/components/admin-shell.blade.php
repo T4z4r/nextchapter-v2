@@ -28,7 +28,7 @@
       <h1>{{ $title }}</h1>
       <form method="POST" action="{{ route('admin.logout') }}">
         @csrf
-        <button type="submit" class="btn-sm btn-ghost"><x-ad-icon name="logout" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"/>Sign out</button>
+        <button type="submit" class="btn-sm btn-ghost"><x-ad-icon name="logout"/>Sign out</button>
       </form>
     </div>
     @endunless

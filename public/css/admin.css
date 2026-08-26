@@ -1,5 +1,5 @@
-/* ============================================================
-   Next Chapter — Admin panel styles
+﻿/* ============================================================
+   Next Chapter â€” Admin panel styles
    Uses the same brand tokens as the public site.
    ============================================================ */
 
@@ -125,4 +125,4 @@ table.ad-table{width:100%;border-collapse:collapse}
 .brand-current{display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin-bottom:8px;max-width:280px}.brand-current img{max-height:56px;max-width:240px;object-fit:contain}.brand-current-dark{background:var(--ink);border-color:rgba(255,255,255,.15)}
 
 .ad-nav a svg{width:16px;height:16px;flex:none;opacity:.72}.ad-nav a:hover svg,.ad-nav a.active svg{opacity:1}.ad-nav a.active svg{stroke:#fff}
-.pw-wrap{position:relative}.pw-wrap input{padding-right:44px}.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:7px;cursor:pointer;color:#5A6B77;display:flex;border-radius:7px;line-height:0}.pw-toggle:hover{color:#17242E;background:rgba(23,36,46,.06)}.pw-toggle svg{width:17px;height:17px}
+.pw-wrap{position:relative}.pw-wrap input{padding-right:44px}.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:7px;cursor:pointer;color:#5A6B77;display:flex;border-radius:7px;line-height:0}.pw-toggle:hover{color:#17242E;background:rgba(23,36,46,.06)}.pw-toggle svg{width:16px;height:16px}
