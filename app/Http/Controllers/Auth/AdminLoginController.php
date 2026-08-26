@@ -40,11 +40,15 @@ class AdminLoginController extends Controller
 
         $request->session()->regenerate();
 
+        \App\Models\ActivityLog::record('auth.login', 'Signed in to the admin panel', $request->user());
+
         return redirect()->intended(route('admin.dashboard'));
     }
 
     public function logout(Request $request): RedirectResponse
     {
+        \App\Models\ActivityLog::record('auth.logout', 'Signed out of the admin panel', $request->user());
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
