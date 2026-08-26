@@ -1,4 +1,4 @@
-@props(['title' => 'Admin'])
+@props(['title' => 'Admin', 'bare' => false])
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -13,6 +13,7 @@
 </head>
 <body class="admin">
 <div class="ad-shell">
+  @unless($bare)
   <aside class="ad-side">
     <div class="ad-brand">
       <div class="t">Next Chapter</div>
@@ -20,14 +21,17 @@
     </div>
     @include('admin.partials.nav')
   </aside>
+  @endunless
   <main class="ad-main">
+    @unless($bare)
     <div class="ad-topbar">
       <h1>{{ $title }}</h1>
       <form method="POST" action="{{ route('admin.logout') }}">
         @csrf
-        <button type="submit" class="btn-sm btn-ghost">Sign out</button>
+        <button type="submit" class="btn-sm btn-ghost"><x-ad-icon name="logout" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"/>Sign out</button>
       </form>
     </div>
+    @endunless
     @include('admin.partials.flash')
     {{ $slot }}
   </main>
