@@ -18,6 +18,8 @@ body.admin{margin:0;background:var(--ad-paper);color:var(--ad-ink);font-family:'
 .ad-nav a.active{background:var(--ad-honey);color:#fff;font-weight:600}
 .ad-nav .sep{margin:12px 12px 6px;font-family:'Spline Sans Mono';font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#6E93A9}
 .ad-main{flex:1;min-width:0;padding:28px 34px 60px}
+main.ad-bare{display:flex;padding:0;min-height:100vh}
+main.ad-bare .login-bg{flex:1;width:100%;margin:0}
 @media(max-width:860px){.ad-shell{flex-direction:column}.ad-side{width:100%;height:auto;position:static}.ad-nav{flex-direction:row;flex-wrap:wrap}}
 
 .ad-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
@@ -229,14 +231,9 @@ table.ad-table{width:100%;border-collapse:collapse}
 .dq-text strong{font-size:13.5px;color:#33475A}
 .dq-text small{font-size:12px;color:var(--ad-mut);font-weight:400}
 
-/* confirm (sign out) modal */
-.confirm-overlay{position:fixed;inset:0;z-index:1000;background:rgba(12,20,27,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:24px;animation:confFade .18s ease}
-@keyframes confFade{from{opacity:0}to{opacity:1}}
-.confirm-open{overflow:hidden}
-.confirm-modal{width:100%;max-width:360px;background:#fff;border-radius:18px;padding:30px 28px 24px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.28);animation:confPop .22s cubic-bezier(.2,.9,.3,1.2)}
-@keyframes confPop{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:none}}
-.confirm-icon{width:58px;height:58px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(135deg,#FCEDEA,#FBDFD9);display:flex;align-items:center;justify-content:center;color:#B3402D}
+/* confirm (sign out) modal — Bootstrap modal skin */
+.confirm-modal{border:none;box-shadow:0 18px 50px rgba(0,0,0,.28);border-radius:18px;padding:30px 26px 24px;text-align:center}
+.confirm-icon{width:58px;height:58px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(135deg,#FCEDEA,#FBDFD9);display:flex;align-items:center;justify-content:center;color:#B3402D}
 .confirm-modal h2{font-family:'Exo 2';font-size:19px;font-weight:700;color:#17242E;margin:0 0 6px}
-.confirm-modal p{color:#5A6B77;font-size:13.5px;line-height:1.55;margin:0 0 22px}
-.confirm-actions{display:flex;gap:10px}
-.confirm-actions .btn{flex:1;justify-content:center;padding:11px;border-radius:10px;font-size:14px}
+.confirm-modal p{color:#5A6B77;font-size:13.5px;line-height:1.55;margin:0 0 20px}
+.confirm-modal .btn{padding:10px;border-radius:10px;font-size:14px}
