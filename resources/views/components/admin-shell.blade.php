@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
   <link rel="stylesheet" href="{{ asset('vendor/trix/trix.css') }}">
 </head>
-<body class="admin">
+<body class="admin {{ $bare ? 'admin-login' : '' }}">
 <div class="ad-shell">
   @unless($bare)
   <aside class="ad-side">

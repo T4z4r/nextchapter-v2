@@ -5,7 +5,9 @@
 
 :root{--ad-ink:#17242E;--ad-paper:#F5F9FB;--ad-line:#D8E5EC;--ad-blue:#2C7CB8;--ad-honey:#459EDF;--ad-mut:#5A6B77}
 *{box-sizing:border-box}
+html,body{min-height:100%}
 body.admin{margin:0;background:var(--ad-paper);color:var(--ad-ink);font-family:'Hanken Grotesk',system-ui,sans-serif;font-size:15px;line-height:1.55}
+body.admin-login{min-height:100vh;background:linear-gradient(155deg,#17242E 0%,#1E5A85 55%,#2C7CB8 100%)}
 
 .ad-shell{display:flex;min-height:100vh}
 .ad-side{width:240px;flex:none;background:#17242E;color:#E4F0F7;padding:22px 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
@@ -18,7 +20,7 @@ body.admin{margin:0;background:var(--ad-paper);color:var(--ad-ink);font-family:'
 .ad-nav a.active{background:var(--ad-honey);color:#fff;font-weight:600}
 .ad-nav .sep{margin:12px 12px 6px;font-family:'Spline Sans Mono';font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#6E93A9}
 .ad-main{flex:1;min-width:0;padding:28px 34px 60px}
-main.ad-bare{display:flex;padding:0;min-height:100vh}
+main.ad-bare{display:flex;padding:0;min-height:100vh;width:100%}
 main.ad-bare .login-bg{flex:1;width:100%;margin:0}
 @media(max-width:860px){.ad-shell{flex-direction:column}.ad-side{width:100%;height:auto;position:static}.ad-nav{flex-direction:row;flex-wrap:wrap}}
 
@@ -75,7 +77,7 @@ table.ad-table{width:100%;border-collapse:collapse}
 .stat .n{font-family:'Exo 2';font-size:30px;font-weight:600;color:var(--ad-blue)}
 .stat .l{font-size:13px;color:var(--ad-mut)}
 
-.login-bg{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;background:linear-gradient(155deg,#17242E 0%,#1E5A85 55%,#2C7CB8 100%);position:relative;overflow:hidden}
+.login-bg{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;background:transparent;position:relative;overflow:hidden}
 .login-bg::before{content:"";position:absolute;top:-120px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(88,203,221,.15) 0%,transparent 70%);pointer-events:none}
 .login-bg::after{content:"";position:absolute;bottom:-100px;left:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(196,137,46,.1) 0%,transparent 70%);pointer-events:none}
 .login-card{width:100%;max-width:400px;background:#fff;border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:40px 36px 36px;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;z-index:1}
