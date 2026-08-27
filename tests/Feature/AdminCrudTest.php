@@ -13,6 +13,7 @@ use Database\Seeders\AdminUserSeeder;
 use Database\Seeders\ContentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -165,6 +166,90 @@ class AdminCrudTest extends TestCase
         $this->get('/')
             ->assertSee('office@nextchapter.uk')
             ->assertSee('Bristol, UK');
+    }
+
+    public function test_settings_mail_smtp_persists_and_applies_callback(): void
+    {
+        $this->actingAs($this->admin())
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'mail_driver' => 'smtp',
+                'mail_host' => 'smtp.mailtrap.io',
+                'mail_port' => '587',
+                'mail_username' => 'smtp-user',
+                'mail_password' => 'secret',
+                'mail_encryption' => 'tls',
+                'mail_from_address' => 'no-reply@nextchapter.uk',
+                'mail_from_name' => 'Next Chapter',
+            ])
+            ->assertSessionHas('success')
+            ->assertSessionHasNoErrors();
+
+        $setting = Setting::get();
+        $this->assertTrue($setting->mailConfigured());
+        $this->assertSame('smtp.mailtrap.io', $setting->mail_host);
+
+        $this->refreshApplication();
+
+        $this->assertSame('smtp', config('mail.default'));
+        $this->assertSame('smtp.mailtrap.io', config('mail.mailers.smtp.host'));
+        $this->assertSame('no-reply@nextchapter.uk', config('mail.from.address'));
+    }
+
+    public function test_settings_mail_requires_host_when_smtp_submitted(): void
+    {
+        $this->actingAs($this->admin())
+            ->from(route('admin.settings.edit'))
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'mail_driver' => 'smtp',
+                'mail_host' => '',
+            ])
+            ->assertSessionHasErrors('mail_host');
+    }
+
+    public function test_saving_log_driver_and_refreshing_does_not_configure_smtp(): void
+    {
+        $this->actingAs($this->admin())
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'mail_driver' => 'log',
+                'mail_from_address' => 'no-reply@nextchapter.uk',
+            ])
+            ->assertSessionHas('success');
+
+        $this->assertFalse(Setting::get()->mailConfigured());
+
+        $this->refreshApplication();
+
+        $this->assertNotSame('smtp', config('mail.default'));
+    }
+
+    public function test_send_test_email_action_sends_using_mail_fake(): void
+    {
+        Mail::fake();
+
+        $admin = $this->admin();
+
+        $this->actingAs($admin)
+            ->from(route('admin.settings.edit'))
+            ->put(route('admin.settings.update'), [
+                'site_name' => 'Next Chapter',
+                'mail_driver' => 'smtp',
+                'mail_host' => 'smtp.mailtrap.io',
+                'mail_port' => '587',
+                'mail_username' => 'user',
+                'mail_password' => 'pass',
+                'mail_encryption' => 'tls',
+                'mail_from_address' => 'no-reply@nextchapter.uk',
+                'mail_from_name' => 'Next Chapter',
+                'action' => 'test',
+            ])
+            ->assertSessionHas('success');
+
+        Mail::assertSent(function (\App\Mail\TestMail $mail) {
+                return $mail->hasTo($this->admin()->email);
+            });
     }
 
     public function test_settings_brand_colors_and_logo_upload(): void

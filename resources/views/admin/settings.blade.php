@@ -1,5 +1,5 @@
 <x-admin-shell title="Site settings">
-  <x-admin-form action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
+  <x-admin-form action="{{ route('admin.settings.update') }}" enctype="multipart/form-data" test testHint="Saves the form first, then attempts to send a test email to your account address so you can verify the SMTP configuration.">
     @method('PUT')
     <div class="form-cols">
       <div class="field">
@@ -26,7 +26,7 @@
         <label>Header logo</label>
         @if($setting->logo_path)
           <div class="brand-current">
-            <img src="{{ asset($setting->logo_path) }}" alt="Current header logo">
+            <img src="{{ asset($setting->logoAssetPath()) }}" alt="Current header logo">
           </div>
           <label style="display:flex;align-items:center;gap:8px;font-weight:400;margin-top:6px">
             <input type="checkbox" name="remove_logo" value="1"> Remove current header logo
@@ -73,6 +73,60 @@
         </div>
       </div>
     @endforeach
+
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px">
+      <h2 style="margin:0">Email (SMTP)</h2>
+      @if($setting->mailConfigured())
+        <span class="badge on">Configured</span>
+      @else
+        <span class="badge off">Using log driver — emails not delivered</span>
+      @endif
+    </div>
+    <p class="hint" style="margin-bottom:10px">
+      Used as the default mailer for this site (notifications, contact forms). Choose <strong>Log</strong> to write emails to the log for debugging instead of sending them.
+    </p>
+    <div class="form-cols">
+      <div class="field">
+        <label for="mail_driver">Mail driver</label>
+        <select id="mail_driver" name="mail_driver">
+          <option value="smtp" @selected(old('mail_driver', $setting->mail_driver ?? 'smtp') === 'smtp')>SMTP — actually send emails</option>
+          <option value="log" @selected(old('mail_driver', $setting->mail_driver ?? 'smtp') === 'log')>Log — write to log, don't send</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mail_host">SMTP host</label>
+        <input id="mail_host" type="text" name="mail_host" value="{{ old('mail_host', $setting->mail_host) }}" placeholder="smtp.example.com">
+        @error('mail_host')<span class="hint" style="color:#B3402D">{{ $message }}</span>@enderror
+      </div>
+      <div class="field">
+        <label for="mail_port">Port</label>
+        <input id="mail_port" type="text" name="mail_port" value="{{ old('mail_port', $setting->mail_port) }}" placeholder="587">
+      </div>
+      <div class="field">
+        <label for="mail_encryption">Encryption</label>
+        <select id="mail_encryption" name="mail_encryption">
+          <option value="tls" @selected(old('mail_encryption', $setting->mail_encryption) === 'tls')>TLS (recommended)</option>
+          <option value="ssl" @selected(old('mail_encryption', $setting->mail_encryption) === 'ssl')>SSL</option>
+          <option value="" @selected(old('mail_encryption', $setting->mail_encryption) === '')>None</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mail_username">Username</label>
+        <input id="mail_username" type="text" name="mail_username" value="{{ old('mail_username', $setting->mail_username) }}" placeholder="you@example.com" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="mail_password">Password</label>
+        <input id="mail_password" type="password" name="mail_password" value="{{ old('mail_password', $setting->mail_password) }}" placeholder="SMTP password" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="mail_from_address">From address</label>
+        <input id="mail_from_address" type="email" name="mail_from_address" value="{{ old('mail_from_address', $setting->mail_from_address) }}" placeholder="noreply@nextchapter.uk">
+      </div>
+      <div class="field">
+        <label for="mail_from_name">From name</label>
+        <input id="mail_from_name" type="text" name="mail_from_name" value="{{ old('mail_from_name', $setting->mail_from_name) }}" placeholder="Next Chapter">
+      </div>
+    </div>
 
     <h2 style="margin-top:8px">Compliance &amp; footer</h2>
     <div class="field">

@@ -31,7 +31,7 @@
 
     <div class="balance-stage">
       @if($settings->logo_path)
-        <img class="stage-logo" src="{{ asset($settings->logo_path) }}" alt="Balance Point">
+        <img class="stage-logo" src="{{ asset($settings->logoAssetPath()) }}" alt="Balance Point">
       @endif
       <div class="beam-wrap">
         <svg class="beam" viewBox="0 0 400 300" role="img" aria-label="A balance scale holding the same clear view for both parties.">

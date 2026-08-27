@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Paginator::defaultView('vendor.pagination.admin');
 
+        $this->applyMailConfig();
+
         foreach ([
             Addon::class,
             ContactMessage::class,
@@ -42,6 +44,35 @@ class AppServiceProvider extends ServiceProvider
             Value::class,
         ] as $model) {
             $model::observe(ContentObserver::class);
+        }
+    }
+
+    private function applyMailConfig(): void
+    {
+        try {
+            $setting = Setting::get();
+
+            if ($setting->mailConfigured()) {
+                $driver = $setting->mail_driver === 'smtp' ? 'smtp' : 'log';
+
+                $this->app['config']->set([
+                    'mail.default' => $driver,
+                    'mail.mailers.smtp.host' => $setting->mail_host,
+                    'mail.mailers.smtp.port' => (int) $setting->mail_port,
+                    'mail.mailers.smtp.username' => $setting->mail_username,
+                    'mail.mailers.smtp.password' => $setting->mail_password,
+                    'mail.mailers.smtp.encryption' => $setting->mail_encryption,
+                ]);
+
+                if ($setting->mail_from_address) {
+                    $this->app['config']->set([
+                        'mail.from.address' => $setting->mail_from_address,
+                        'mail.from.name' => $setting->mail_from_name ?: (string) $setting->site_name,
+                    ]);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Settings table not available yet (pre-migration) — keep .env defaults.
         }
     }
 }

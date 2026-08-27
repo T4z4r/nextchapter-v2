@@ -12,7 +12,14 @@ class Setting extends Model
         'contact_email', 'opening_hours', 'location', 'disclaimer_bar_text',
         'footer_blurb', 'copyright_holder', 'legal_footnote',
         'color_primary', 'color_deep', 'color_ink', 'color_accent',
+        'mail_driver', 'mail_host', 'mail_port', 'mail_username', 'mail_password',
+        'mail_encryption', 'mail_from_address', 'mail_from_name',
     ];
+
+    public function mailConfigured(): bool
+    {
+        return $this->mail_driver === 'smtp' && $this->mail_host && $this->mail_port;
+    }
 
     public const COLOR_DEFAULTS = [
         'color_primary' => '#459EDF',
@@ -26,6 +33,14 @@ class Setting extends Model
         return Cache::rememberForever('settings', function () {
             return static::query()->firstOrNew();
         });
+    }
+
+    public function logoAssetPath(): string
+    {
+        return match ($this->logo_path) {
+            'images/nextchapter-logo.png' => 'images/balancepoint-logo.png',
+            default => $this->logo_path ?: 'images/balancepoint-logo.png',
+        };
     }
 
     public function palette(): string

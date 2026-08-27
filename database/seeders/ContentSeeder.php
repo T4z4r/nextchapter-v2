@@ -19,7 +19,7 @@ class ContentSeeder extends Seeder
     {
         Setting::query()->updateOrCreate(['id' => 1], [
             'site_name' => 'Next Chapter',
-            'logo_path' => 'images/nextchapter-logo.png',
+            'logo_path' => 'images/balancepoint-logo.png',
             'footer_logo_path' => 'images/nextchapter-footer.png',
             'meta_description' => 'Next Chapter helps you map your finances, model fair settlement scenarios and reach an agreement you both understand, powered by Balance Point, purpose-built modelling software built by a UK Chartered Certified Accountant.',
             'contact_email' => 'hello@nextchapter.uk',

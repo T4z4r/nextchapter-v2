@@ -2,7 +2,7 @@
   <div class="login-bg">
     <div class="login-card">
       <div class="login-logo">
-        <img src="{{ asset('images/balancepoint-logo.png') }}" alt="Next Chapter" width="180">
+        <img src="{{ asset('images/balancepoint-logo.png') }}" alt="Balance Point" width="180">
       </div>
       <h1>Welcome back</h1>
       <p class="sub">Sign in to manage your site content.</p>
