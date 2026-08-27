@@ -19,7 +19,7 @@ class AdminAuthTest extends TestCase
 
     public function test_login_page_renders(): void
     {
-        $this->get('/admin/login')->assertOk()->assertSee('Next Chapter admin');
+        $this->get('/admin/login')->assertOk()->assertSee('Welcome back');
     }
 
     public function test_non_admin_user_is_rejected(): void

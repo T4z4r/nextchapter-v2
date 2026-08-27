@@ -1,22 +1,25 @@
 <x-admin-shell title="Sign in" bare>
-  <div class="login-wrap">
+  <div class="login-bg">
     <div class="login-card">
-      <h1>Next Chapter admin</h1>
-      <p class="sub">Sign in with an administrator account.</p>
+      <div class="login-logo">
+        <img src="{{ asset('images/balancepoint-logo.png') }}" alt="Next Chapter" width="180">
+      </div>
+      <h1>Welcome back</h1>
+      <p class="sub">Sign in to manage your site content.</p>
 
       @if(session('status'))<div class="alert ok">{{ session('status') }}</div>@endif
 
       <form method="POST" action="{{ route('admin.login.attempt') }}">
         @csrf
         <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+          <label for="email">Email address</label>
+          <input id="email" type="email" name="email" placeholder="admin@nextchapter.uk" value="{{ old('email') }}" required autofocus>
           @error('email')<span class="hint" style="color:#B3402D">{{ $message }}</span>@enderror
         </div>
         <div class="field">
           <label for="password">Password</label>
           <div class="pw-wrap">
-            <input id="password" type="password" name="password" required autocomplete="current-password">
+            <input id="password" type="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
             <button type="button" class="pw-toggle" data-toggle-password="password"
                     aria-label="Show password" aria-pressed="false">
               <x-ad-icon name="eye" class="i-eye"/>
@@ -29,9 +32,10 @@
           <input id="remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
           <label for="remember">Remember me</label>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><x-ad-icon name="login"/>Sign in</button>
+        <button type="submit" class="btn btn-primary login-btn"><x-ad-icon name="login"/>Sign in</button>
       </form>
     </div>
+    <p class="login-foot">&copy; {{ date('Y') }} Next Chapter. All rights reserved.</p>
   </div>
 
   <script>
