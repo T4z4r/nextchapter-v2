@@ -26,7 +26,7 @@ class TestMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            text: 'test-email',
+            text: 'mail.test-email',
         );
     }
 }
