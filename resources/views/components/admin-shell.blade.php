@@ -26,15 +26,29 @@
     @unless($bare)
     <div class="ad-topbar">
       <h1>{{ $title }}</h1>
-      <form method="POST" action="{{ route('admin.logout') }}">
+      <form method="POST" action="{{ route('admin.logout') }}" class="logout-form">
         @csrf
-        <button type="submit" class="btn-sm btn-ghost"><x-ad-icon name="logout"/>Sign out</button>
+        <button type="button" data-confirm-logout class="btn-sm btn-ghost"><x-ad-icon name="logout"/>Sign out</button>
       </form>
     </div>
     @endunless
     @include('admin.partials.flash')
     {{ $slot }}
   </main>
+</div>
+
+<div class="confirm-overlay" id="confirmLogout" hidden>
+  <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirmLogoutTitle">
+    <div class="confirm-icon" aria-hidden="true">
+      <x-ad-icon name="logout" style="width:26px;height:26px"/>
+    </div>
+    <h2 id="confirmLogoutTitle">Sign out?</h2>
+    <p>You will be returned to the login page. You can sign back in any time.</p>
+    <div class="confirm-actions">
+      <button type="button" class="btn btn-ghost" data-confirm-cancel>Cancel</button>
+      <button type="button" class="btn btn-danger" data-confirm-ok><x-ad-icon name="logout"/>Sign out</button>
+    </div>
+  </div>
 </div>
 <script src="{{ asset('vendor/trix/trix.umd.min.js') }}"></script>
 <script>if (window.Trix) { Trix.config.blockAttributes.default.tagName = 'p'; }</script>
@@ -103,6 +117,28 @@
         var btn = e.target.closest('.dz-clear');
         if (btn) { e.stopPropagation(); clearFile(zone, input); }
       });
+    });
+  })();
+  (function () {
+    var overlay = document.getElementById('confirmLogout');
+    var trigger = document.querySelector('[data-confirm-logout]');
+    var form = document.querySelector('.logout-form');
+    if (!overlay || !trigger || !form) return;
+    function close() { overlay.hidden = true; document.body.classList.remove('confirm-open'); }
+    function open() {
+      overlay.hidden = false;
+      document.body.classList.add('confirm-open');
+      var ok = overlay.querySelector('[data-confirm-ok]');
+      if (ok) ok.focus();
+    }
+    trigger.addEventListener('click', function (e) { e.preventDefault(); open(); });
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) close();
+    });
+    overlay.querySelector('[data-confirm-cancel]').addEventListener('click', close);
+    overlay.querySelector('[data-confirm-ok]').addEventListener('click', function () { form.submit(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !overlay.hidden) close();
     });
   })();
 </script>
