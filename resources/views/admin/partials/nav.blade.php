@@ -32,6 +32,11 @@
     <x-ad-icon name="mail"/>Enquiries
   </a>
 
+  <span class="sep">Analytics</span>
+  <a href="{{ route('admin.visits.index') }}" class="{{ str_starts_with($current, 'admin.visits') ? 'active' : '' }}">
+    <x-ad-icon name="eye"/>Site visits
+  </a>
+
   <span class="sep">Site-wide</span>
   <a href="{{ route('admin.values.index') }}" class="{{ str_starts_with($current, 'admin.values') ? 'active' : '' }}">
     <x-ad-icon name="award"/>About values

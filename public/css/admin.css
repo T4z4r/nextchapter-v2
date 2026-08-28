@@ -242,3 +242,51 @@ table.ad-table{width:100%;border-collapse:collapse}
 .confirm-modal .btn-ghost{background:#fff}
 .confirm-modal .btn-danger{background:#FCEDEA;color:#B3402D;border-color:#F3CFC7}
 .confirm-modal .btn-danger:hover{background:#B3402D;color:#fff}
+
+/* ============================================================
+   Site visit tracking
+   ============================================================ */
+.vis-strip{display:flex;align-items:center;gap:26px;margin-bottom:20px;flex-wrap:wrap}
+.vs-main{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:inherit;min-width:180px}
+.vs-today{font-family:'Exo 2';font-size:34px;font-weight:700;color:var(--ad-blue);line-height:1.1}
+.vs-label{font-size:13px;color:var(--ad-mut)}
+.vs-label small{opacity:.85}
+.vs-more{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ad-blue);margin-top:4px}
+.vs-more svg{width:13px;height:13px}
+.vs-bars{display:flex;align-items:flex-end;gap:8px;flex:1;min-width:200px;height:74px;padding:0 4px;border-bottom:1px solid var(--ad-line)}
+.vs-bar-col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:3px}
+.vs-bar{background:linear-gradient(180deg,var(--ad-honey),var(--ad-blue));border-radius:4px 4px 2px 2px;transition:height .3s}
+.vs-total{font-family:'Exo 2';font-size:20px;font-weight:600;color:#33475A;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.vs-total small{font-family:'Hanken Grotesk';font-size:11.5px;color:var(--ad-mut);font-weight:500}
+
+.vis-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.vis-title{font-family:'Exo 2';font-size:26px;margin:0 0 4px}
+.vis-sub{margin:0;color:var(--ad-mut);font-size:14px}
+.vis-row{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:18px;align-items:start}
+.vis-row .card h2{font-family:'Exo 2';font-size:16px;margin:0 0 18px}
+.vis-row .card h2 small{font-family:'Hanken Grotesk';font-weight:400;color:var(--ad-mut);font-size:12.5px}
+.bar-chart{display:flex;gap:10px;align-items:flex-end;height:220px;padding-top:8px}
+.bar-col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;min-width:0}
+.bar-track{width:100%;max-width:34px;height:100%;display:flex;align-items:flex-end;background:#F1F6FA;border-radius:6px;overflow:hidden}
+.bar-fill{width:100%;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--ad-honey),var(--ad-blue));transition:height .3s}
+.bar-n{font-family:'Spline Sans Mono';font-size:11.5px;color:#33475A}
+.bar-l{font-size:11px;color:var(--ad-mut);text-align:center;line-height:1.2}
+.bar-l small{display:block;opacity:.8}
+.tops{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.tops-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;font-size:12.5px}
+.tops-path{font-family:'Spline Sans Mono';color:#33475A;word-break:break-all}
+.tops-n{font-family:'Exo 2';font-weight:600;color:var(--ad-blue)}
+.tops-track{height:6px;border-radius:6px;background:#F1F6FA;overflow:hidden}
+.tops-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--ad-honey),var(--ad-blue))}
+.vis-list .tbl-wrap{overflow-x:auto}
+.vis-list .tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+.vis-list .tbl th{font-family:'Spline Sans Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ad-mut);text-align:left;padding:0 12px 10px;border-bottom:1px solid var(--ad-line);white-space:nowrap}
+.vis-list .tbl td{padding:11px 12px;border-bottom:1px solid #EDF3F7;vertical-align:top}
+.vis-list .tbl tr:hover td{background:#FAFCFE}
+.v-rel{display:block;font-weight:600;color:#33475A;white-space:nowrap}
+.v-abs{display:block;font-size:11.5px;color:var(--ad-mut);white-space:nowrap}
+.v-path{background:#EEF4F9;border-radius:5px;padding:2px 7px;font-family:'Spline Sans Mono';font-size:12px;color:#2B5A7D}
+.mono{font-family:'Spline Sans Mono';font-size:12px}
+.v-ref{color:var(--ad-mut);font-size:12.5px;word-break:break-all}
+.v-ua{color:var(--ad-mut);font-size:12px}
+@media(max-width:900px){.vis-row{grid-template-columns:1fr}.vis-strip{gap:18px}}

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\StepController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\TutorialController;
 use App\Http\Controllers\Admin\ValueController;
+use App\Http\Controllers\Admin\VisitController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -92,4 +93,6 @@ Route::prefix('admin')
         Route::get('messages', [ContactMessageController::class, 'index'])->name('messages.index');
         Route::get('messages/{message}', [ContactMessageController::class, 'show'])->name('messages.show');
         Route::delete('messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
+
+        Route::get('visits', [VisitController::class, 'index'])->name('visits.index');
     });

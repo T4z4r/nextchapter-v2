@@ -54,6 +54,23 @@
     </a>
   </div>
 
+  <div class="vis-strip card">
+    <a href="{{ route('admin.visits.index') }}" class="vs-main">
+      <span class="vs-today">{{ number_format($visitsToday) }}</span>
+      <span class="vs-label">visits today <small>({{ number_format($visitsUniqueToday) }} unique)</small></span>
+      <span class="vs-more">View analytics <x-ad-icon name="external"/></span>
+    </a>
+    <div class="vs-bars" title="Last 7 days">
+      @foreach($visitSeries as $seriesDate => $value)
+        @php($seriesDay = \Carbon\CarbonImmutable::createFromFormat('Y-m-d', $seriesDate))
+        <div class="vs-bar-col" title="{{ $seriesDay->format('D j M') }} — {{ $value }}">
+          <div class="vs-bar" style="height:{{ max(3, round(($value / max(1, max($visitSeries))) * 100)) }}%"></div>
+        </div>
+      @endforeach
+    </div>
+    <div class="vs-total">{{ number_format($visitsTotal) }}<small>all-time visits</small></div>
+  </div>
+
   <div class="dash-cols">
     <div class="card dash-activity">
       <h2>Recent activity</h2>

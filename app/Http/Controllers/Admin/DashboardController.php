@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Addon;
 use App\Models\ContactMessage;
 use App\Models\Faq;
+use App\Models\PageVisit;
 use App\Models\Plan;
 use App\Models\Tutorial;
 use Illuminate\Contracts\View\View;
@@ -33,6 +34,10 @@ class DashboardController extends Controller
             'plans' => Plan::where('is_active', true)->count(),
             'addons' => Addon::where('is_active', true)->count(),
             'recent' => ActivityLog::with('user')->latest()->limit(8)->get(),
+            'visitsToday' => PageVisit::todayCount(),
+            'visitsUniqueToday' => PageVisit::uniqueToday(),
+            'visitsTotal' => PageVisit::total(),
+            'visitSeries' => PageVisit::dailySeries(7),
         ]);
     }
 }
