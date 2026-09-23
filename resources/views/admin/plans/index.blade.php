@@ -1,8 +1,17 @@
 <x-admin-shell title="Packages">
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <h2 style="margin:0">Pricing packages</h2>
-      <a href="{{ route('admin.plans.create') }}" class="btn btn-primary">+ New package</a>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px;flex-wrap:wrap">
+      <div>
+        <h2 style="margin:0 0 4px">Pricing packages</h2>
+        <p class="hint" style="margin:0;color:#5A6B77;font-size:13px">Source: {{ config('services.packages.url') ?: 'not configured' }}</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <form method="POST" action="{{ route('admin.plans.sync') }}">
+          @csrf
+          <button class="btn btn-ghost" type="submit">Fetch from API</button>
+        </form>
+        <a href="{{ route('admin.plans.create') }}" class="btn btn-primary">+ New package</a>
+      </div>
     </div>
     <table class="ad-table">
       <thead><tr><th>#</th><th>Tier</th><th>Name</th><th>Individual</th><th>Joint</th><th>Status</th><th style="width:230px"></th></tr></thead>

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Plan;
+use App\Services\PackageCatalogImporter;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use RuntimeException;
 
 class PlanController extends ContentCrudController
 {
@@ -50,5 +53,24 @@ class PlanController extends ContentCrudController
     protected function booleans(): array
     {
         return ['is_active', 'featured'];
+    }
+
+    public function sync(PackageCatalogImporter $importer): RedirectResponse
+    {
+        try {
+            $stats = $importer->import();
+        } catch (RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return back()->with(
+            'success',
+            sprintf(
+                'Packages fetched from API. %d created, %d updated, %d skipped.',
+                $stats['created'],
+                $stats['updated'],
+                $stats['skipped']
+            )
+        );
     }
 }

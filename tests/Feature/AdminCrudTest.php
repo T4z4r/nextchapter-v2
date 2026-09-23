@@ -13,6 +13,7 @@ use Database\Seeders\AdminUserSeeder;
 use Database\Seeders\ContentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -91,6 +92,63 @@ class AdminCrudTest extends TestCase
             ->assertSee('1,234')
             ->assertSee('data-joint="1,567"', false)
             ->assertSee('Feature one');
+    }
+
+    public function test_admin_can_fetch_packages_from_api(): void
+    {
+        config(['services.packages.url' => 'https://packages.test/api/packages']);
+
+        Http::fake([
+            'https://packages.test/api/packages' => Http::response([
+                'data' => [
+                    [
+                        'id' => '01a0ccab-8460-7281-ae9c-babdee09bb05',
+                        'slug' => 'tier-2-financial-divorce-navigator-standard',
+                        'name' => 'Tier 2: Financial Divorce Navigator (Standard)',
+                        'audience' => 'direct_to_consumer',
+                        'category' => 'standard',
+                        'prices' => [
+                            'individual_gbp' => 2495,
+                            'joint_gbp' => 3495,
+                        ],
+                        'duration' => 'Up to 6 months',
+                        'features' => [
+                            'Everything in Tier 1',
+                            'Automated financial collation',
+                        ],
+                        'target_client' => 'Self-negotiation or mediation',
+                        'notes' => 'Charge the difference if upgrading from Tier 1.',
+                    ],
+                    [
+                        'slug' => 'referral-partnership',
+                        'name' => 'Referral Partnership',
+                        'category' => 'b2b',
+                        'prices' => [
+                            'individual_gbp' => null,
+                            'joint_gbp' => null,
+                        ],
+                    ],
+                ],
+            ]),
+        ]);
+
+        $this->actingAs($this->admin())
+            ->post(route('admin.plans.sync'))
+            ->assertRedirect()
+            ->assertSessionHas('success', 'Packages fetched from API. 1 created, 0 updated, 1 skipped.');
+
+        $this->assertDatabaseHas('plans', [
+            'slug' => 'tier-2-financial-divorce-navigator-standard',
+            'name' => 'Tier 2: Financial Divorce Navigator (Standard)',
+            'tier_label' => 'Standard',
+            'price_ind' => 2495,
+            'price_joint' => 3495,
+            'featured' => true,
+        ]);
+
+        $this->get('/')
+            ->assertSee('Tier 2: Financial Divorce Navigator (Standard)')
+            ->assertSee('data-joint="3,495"', false);
     }
 
     public function test_step_boolean_toggle_hides_from_site(): void

@@ -42,4 +42,8 @@ return [
         'cancel_url' => env('STRIPE_CHECKOUT_CANCEL_URL'),
     ],
 
+    'packages' => [
+        'url' => env('PACKAGES_API_URL', env('APP_URL') ? rtrim(env('APP_URL'), '/') . '/api/packages' : null),
+    ],
+
 ];

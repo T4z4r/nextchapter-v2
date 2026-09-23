@@ -83,6 +83,7 @@ Route::prefix('admin')
             ->whereIn('direction', ['up', 'down'])->name('tutorials.move');
 
         Route::resource('plans', PlanController::class)->except('show')->parameters(['plans' => 'id']);
+        Route::post('plans/sync-api', [PlanController::class, 'sync'])->name('plans.sync');
         Route::post('plans/{id}/move/{direction}', [PlanController::class, 'move'])
             ->whereIn('direction', ['up', 'down'])->name('plans.move');
 
