@@ -62,6 +62,31 @@ class HomePageTest extends TestCase
             ->assertSee('data-joint="' . number_format($plan->price_joint) . '"', false);
     }
 
+    public function test_pricing_grid_is_scrollable_when_more_than_three_plans_are_active(): void
+    {
+        $this->seedSite();
+
+        Plan::query()->create([
+            'sort' => 4,
+            'slug' => 'extra-package',
+            'tier_label' => 'Extra',
+            'name' => 'Extra Package',
+            'duration_label' => 'Flexible',
+            'price_ind' => 100,
+            'price_joint' => 150,
+            'sub_ind' => 'Extra individual option.',
+            'sub_joint' => 'Extra joint option.',
+            'features' => 'Extra support',
+            'cta_label' => 'Choose extra',
+            'is_active' => true,
+        ]);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('class="price-grid scrollable"', false)
+            ->assertSee('aria-label="Scrollable pricing packages"', false);
+    }
+
     public function test_tutorial_lock_state_renders(): void
     {
         $this->seedSite();

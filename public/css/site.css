@@ -245,6 +245,12 @@ section{padding:92px 0}
 .upgrade-banner p{font-size:15px;color:var(--ink);line-height:1.5}
 .upgrade-banner strong{color:var(--pine)}
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.price-grid.scrollable{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(320px,calc((100% - 44px)/3));grid-template-columns:none;overflow-x:auto;overflow-y:visible;padding:12px 4px 24px;margin:-12px -4px 0;scroll-snap-type:x proximity;scrollbar-gutter:stable}
+.price-grid.scrollable .plan{scroll-snap-align:start}
+.price-grid.scrollable::-webkit-scrollbar{height:10px}
+.price-grid.scrollable::-webkit-scrollbar-track{background:var(--paper);border-radius:999px}
+.price-grid.scrollable::-webkit-scrollbar-thumb{background:var(--sage);border-radius:999px;border:2px solid var(--paper)}
+.price-grid.scrollable:focus-visible{outline:3px solid var(--honey);outline-offset:6px;border-radius:16px}
 .plan{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px 26px;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative}
 .plan:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
 .plan.featured{border-color:var(--honey);box-shadow:0 0 0 1px var(--honey),var(--shadow)}
@@ -340,6 +346,7 @@ footer li a:hover{color:#fff}
   .nav-links.open{display:flex;position:absolute;top:74px;left:0;right:0;flex-direction:column;background:var(--paper);padding:20px 28px;border-bottom:1px solid var(--line);gap:18px}
   .nav-cta .btn-ghost{display:none}
   .steps,.feat-grid,.tut-grid,.price-grid,.values,.addons,.foot-grid{grid-template-columns:1fr}
+  .price-grid.scrollable{grid-auto-flow:row;grid-auto-columns:auto;overflow-x:visible;padding:0;margin:0;scroll-snap-type:none}
   section{padding:64px 0}
   .hero{padding:44px 0 20px}
   .pro{padding:32px 26px}
