@@ -135,7 +135,7 @@ class AdminCrudTest extends TestCase
         $this->actingAs($this->admin())
             ->post(route('admin.plans.sync'))
             ->assertRedirect()
-            ->assertSessionHas('success', 'Packages fetched from API. 1 created, 0 updated, 1 skipped.');
+            ->assertSessionHas('success', 'Packages fetched from API. 1 created, 0 updated, 3 deleted, 1 skipped.');
 
         $this->assertDatabaseHas('plans', [
             'slug' => 'tier-2-financial-divorce-navigator-standard',

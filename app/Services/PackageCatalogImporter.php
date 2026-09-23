@@ -10,7 +10,7 @@ use RuntimeException;
 class PackageCatalogImporter
 {
     /**
-     * @return array{created: int, updated: int, skipped: int}
+     * @return array{created: int, updated: int, deleted: int, skipped: int}
      */
     public function import(?string $url = null): array
     {
@@ -32,8 +32,9 @@ class PackageCatalogImporter
             throw new RuntimeException('Packages API response did not contain a data array.');
         }
 
-        $stats = ['created' => 0, 'updated' => 0, 'skipped' => 0];
+        $stats = ['created' => 0, 'updated' => 0, 'deleted' => 0, 'skipped' => 0];
         $sort = 1;
+        $syncedSlugs = [];
 
         foreach ($packages as $package) {
             $data = $this->mapPackage($package, $sort);
@@ -46,7 +47,14 @@ class PackageCatalogImporter
             $plan = Plan::query()->where('slug', $data['slug'])->first();
             $plan ? $plan->update($data) : Plan::query()->create($data);
             $stats[$plan ? 'updated' : 'created']++;
+            $syncedSlugs[] = $data['slug'];
             $sort++;
+        }
+
+        if ($syncedSlugs !== [] && config('services.packages.delete_stale')) {
+            $stats['deleted'] = Plan::query()
+                ->whereNotIn('slug', $syncedSlugs)
+                ->delete();
         }
 
         return $stats;

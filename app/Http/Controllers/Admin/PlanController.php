@@ -66,9 +66,10 @@ class PlanController extends ContentCrudController
         return back()->with(
             'success',
             sprintf(
-                'Packages fetched from API. %d created, %d updated, %d skipped.',
+                'Packages fetched from API. %d created, %d updated, %d deleted, %d skipped.',
                 $stats['created'],
                 $stats['updated'],
+                $stats['deleted'],
                 $stats['skipped']
             )
         );

@@ -55,31 +55,25 @@ class PackageController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
-        $stripeSecret = config('services.stripe.secret');
+        $purchaseUrl = config('services.packages.purchase_url');
 
-        if (! $stripeSecret) {
+        if (! $purchaseUrl) {
             return response()->json([
-                'message' => 'Stripe is not configured. Set STRIPE_SECRET_KEY to enable checkout.',
+                'message' => 'Package purchase API is not configured. Set PACKAGES_PURCHASE_API_URL to enable checkout.',
             ], 503);
         }
 
-        $response = Http::asForm()
-            ->withToken($stripeSecret)
-            ->post('https://api.stripe.com/v1/checkout/sessions', [
-                'mode' => 'payment',
-                'success_url' => config('services.stripe.success_url') ?: url('/#pricing'),
-                'cancel_url' => config('services.stripe.cancel_url') ?: url('/#pricing'),
+        $response = Http::acceptJson()
+            ->asJson()
+            ->timeout(20)
+            ->post($purchaseUrl, [
+                'package_slug' => $plan->slug,
+                'billing_variant' => $data['billing_variant'],
                 'customer_email' => $data['customer_email'],
-                'line_items[0][quantity]' => 1,
-                'line_items[0][price_data][currency]' => 'gbp',
-                'line_items[0][price_data][unit_amount]' => (int) round($plan->priceFor($data['billing_variant']) * 100),
-                'line_items[0][price_data][product_data][name]' => $plan->name . ' - ' . str_replace('_', ' ', $data['billing_variant']),
-                'metadata[package_slug]' => $plan->slug,
-                'metadata[billing_variant]' => $data['billing_variant'],
             ]);
 
         if ($response->failed()) {
-            Log::warning('Stripe checkout session creation failed.', [
+            Log::warning('Remote package purchase API failed.', [
                 'status' => $response->status(),
                 'body' => $response->json(),
             ]);
@@ -101,12 +95,12 @@ class PackageController extends Controller
                 $plan->name,
                 $data['billing_variant'] === 'joint' ? 'joint application' : 'individual',
                 number_format($plan->priceFor($data['billing_variant']), 0),
-                $session['id'] ?? 'unknown'
+                $session['checkout_session_id'] ?? $session['id'] ?? 'unknown'
             ),
         ]);
 
         return response()->json([
-            'checkout_session_id' => $session['id'] ?? null,
+            'checkout_session_id' => $session['checkout_session_id'] ?? $session['id'] ?? null,
             'url' => $session['url'] ?? null,
         ]);
     }

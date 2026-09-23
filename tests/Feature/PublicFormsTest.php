@@ -108,14 +108,14 @@ class PublicFormsTest extends TestCase
             ->assertSessionHas('error');
     }
 
-    public function test_api_purchase_creates_stripe_checkout_session(): void
+    public function test_api_purchase_proxies_to_remote_package_purchase_api(): void
     {
-        config(['services.stripe.secret' => 'sk_test_123']);
+        config(['services.packages.purchase_url' => 'https://balancepoint.uk/api/packages/purchase']);
 
         Http::fake([
-            'https://api.stripe.com/v1/checkout/sessions' => Http::response([
-                'id' => 'cs_test_123',
-                'url' => 'https://checkout.stripe.test/session/cs_test_123',
+            'https://balancepoint.uk/api/packages/purchase' => Http::response([
+                'checkout_session_id' => 'cs_test_123',
+                'url' => 'https://checkout.stripe.com/c/pay/cs_test_123',
             ]),
         ]);
 
@@ -127,13 +127,12 @@ class PublicFormsTest extends TestCase
 
         $response->assertOk()
             ->assertJsonPath('checkout_session_id', 'cs_test_123')
-            ->assertJsonPath('url', 'https://checkout.stripe.test/session/cs_test_123');
+            ->assertJsonPath('url', 'https://checkout.stripe.com/c/pay/cs_test_123');
 
-        Http::assertSent(fn ($request) => $request->url() === 'https://api.stripe.com/v1/checkout/sessions'
+        Http::assertSent(fn ($request) => $request->url() === 'https://balancepoint.uk/api/packages/purchase'
             && $request['customer_email'] === 'client@example.test'
-            && $request['line_items[0][price_data][unit_amount]'] === 349500
-            && $request['metadata[package_slug]'] === 'tier-2-standard'
-            && $request['metadata[billing_variant]'] === 'joint');
+            && $request['package_slug'] === 'tier-2-standard'
+            && $request['billing_variant'] === 'joint');
 
         $this->assertDatabaseHas('contact_messages', [
             'type' => 'checkout',
@@ -143,9 +142,9 @@ class PublicFormsTest extends TestCase
         ]);
     }
 
-    public function test_api_purchase_requires_stripe_configuration(): void
+    public function test_api_purchase_requires_remote_purchase_api_configuration(): void
     {
-        config(['services.stripe.secret' => null]);
+        config(['services.packages.purchase_url' => null]);
 
         $this->postJson(route('api.packages.purchase'), [
             'package_slug' => 'tier-2-standard',

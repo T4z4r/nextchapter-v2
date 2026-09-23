@@ -43,7 +43,11 @@ return [
     ],
 
     'packages' => [
-        'url' => env('PACKAGES_API_URL', env('APP_URL') ? rtrim(env('APP_URL'), '/') . '/api/packages' : null),
+        'url' => env('PACKAGES_API_URL', 'https://balancepoint.uk/api/packages'),
+        'purchase_url' => env('PACKAGES_PURCHASE_API_URL', 'https://balancepoint.uk/api/packages/purchase'),
+        'auto_sync' => env('PACKAGES_AUTO_SYNC', true),
+        'sync_ttl' => env('PACKAGES_SYNC_TTL', 900),
+        'delete_stale' => env('PACKAGES_DELETE_STALE', true),
     ],
 
 ];
