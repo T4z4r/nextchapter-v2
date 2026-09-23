@@ -1,4 +1,4 @@
-/* Next Chapter — public site behaviour */
+/* Next Chapter - public site behaviour */
 
 document.getElementById('yr').textContent = new Date().getFullYear();
 
@@ -77,37 +77,153 @@ if (dv && dp) {
   dp.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playDemo(); } });
 }
 
-/* Checkout buttons → POST /checkout-intent (Stripe integration point).
-   Swap this handler for a fetch() to a Stripe Checkout Session endpoint
-   once payment is connected; the route already records the interest. */
+// Checkout buttons -> Stripe Checkout session API.
 function currentMode() {
   return toggle.querySelector('.active').dataset.mode;
 }
 
+function showCheckoutMessage(message, type = 'err') {
+  let banner = document.getElementById('checkoutFlash');
+  const pricing = document.getElementById('pricing');
+  if (!banner && pricing) {
+    banner = document.createElement('div');
+    banner.id = 'checkoutFlash';
+    banner.className = 'flash-banner';
+    pricing.querySelector('.wrap').prepend(banner);
+  }
+  if (banner) {
+    banner.className = `flash-banner ${type}`;
+    banner.textContent = message;
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    alert(message);
+  }
+}
+
 async function startCheckout(pkg, mode) {
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = document.body.dataset.checkoutUrl || '/checkout-intent';
-  const csrf = document.querySelector('meta[name="csrf-token"]');
-  const fields = {
-    _token: csrf ? csrf.content : '',
-    package: pkg,
-    mode: mode,
-  };
-  Object.entries(fields).forEach(([k, v]) => {
-    const i = document.createElement('input');
-    i.type = 'hidden';
-    i.name = k;
-    i.value = v;
-    form.appendChild(i);
+  const button = document.querySelector(`.buy[data-package="${pkg}"]`);
+  if (button && button.dataset.checkoutPage) {
+    window.location.href = `${button.dataset.checkoutPage}?billing_variant=${encodeURIComponent(mode)}`;
+    return;
+  }
+
+  const email = prompt('Enter your email address to start secure checkout');
+  if (!email) return;
+
+  const response = await fetch(document.body.dataset.packagePurchaseUrl || '/api/packages/purchase', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      package_slug: pkg,
+      billing_variant: mode,
+      customer_email: email,
+    }),
   });
-  document.body.appendChild(form);
-  form.submit();
+
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    showCheckoutMessage(payload.message || 'Checkout could not be started. Please try again.');
+    return;
+  }
+
+  if (payload.url) {
+    window.location.href = payload.url;
+    return;
+  }
+
+  showCheckoutMessage('Checkout started, but Stripe did not return a redirect URL. Please contact us.');
 }
 
 document.querySelectorAll('.buy').forEach(b => {
-  b.addEventListener('click', () => startCheckout(b.dataset.package, currentMode()));
+  b.addEventListener('click', async () => {
+    const original = b.textContent;
+    b.disabled = true;
+    b.textContent = 'Starting checkout...';
+    try {
+      await startCheckout(b.dataset.package, currentMode());
+    } catch (e) {
+      showCheckoutMessage('Checkout could not be started. Please check your connection and try again.');
+    } finally {
+      b.disabled = false;
+      b.textContent = original;
+    }
+  });
 });
+
+// Checkout option page
+const checkoutPage = document.querySelector('.checkout-page');
+const checkoutForm = document.getElementById('checkoutForm');
+if (checkoutPage && checkoutForm) {
+  const amount = document.getElementById('checkoutAmount');
+  const sub = document.getElementById('checkoutSub');
+  const message = document.getElementById('checkoutMessage');
+  const featureLines = [...document.querySelectorAll('.checkout-features [data-ind]')];
+
+  function setCheckoutMode(mode) {
+    amount.textContent = mode === 'joint' ? amount.dataset.joint : amount.dataset.ind;
+    sub.textContent = mode === 'joint' ? sub.dataset.joint : sub.dataset.ind;
+    featureLines.forEach(line => {
+      line.textContent = mode === 'joint' ? line.dataset.joint : line.dataset.ind;
+    });
+  }
+
+  checkoutForm.querySelectorAll('input[name="billing_variant"]').forEach(input => {
+    input.addEventListener('change', () => setCheckoutMode(input.value));
+  });
+
+  function showCheckoutPageError(text) {
+    message.hidden = false;
+    message.textContent = text;
+  }
+
+  checkoutForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    message.hidden = true;
+
+    const submit = checkoutForm.querySelector('button[type="submit"]');
+    const original = submit.textContent;
+    submit.disabled = true;
+    submit.textContent = 'Starting checkout...';
+
+    try {
+      const formData = new FormData(checkoutForm);
+      const response = await fetch(checkoutPage.dataset.purchaseUrl || '/api/packages/purchase', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          package_slug: checkoutPage.dataset.packageSlug,
+          billing_variant: formData.get('billing_variant'),
+          customer_email: formData.get('customer_email'),
+        }),
+      });
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        showCheckoutPageError(payload.message || 'Checkout could not be started. Please try again.');
+        return;
+      }
+
+      if (payload.url) {
+        window.location.href = payload.url;
+        return;
+      }
+
+      showCheckoutPageError('Checkout started, but Stripe did not return a redirect URL. Please contact us.');
+    } catch (e) {
+      showCheckoutPageError('Checkout could not be started. Please check your connection and try again.');
+    } finally {
+      submit.disabled = false;
+      submit.textContent = original;
+    }
+  });
+}
 
 // tutorial video lightbox (uploaded tutorial videos)
 const tlb = document.createElement('div');

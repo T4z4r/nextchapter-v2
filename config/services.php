@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'stripe' => [
+        'secret' => env('STRIPE_SECRET_KEY'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'success_url' => env('STRIPE_CHECKOUT_SUCCESS_URL'),
+        'cancel_url' => env('STRIPE_CHECKOUT_CANCEL_URL'),
+    ],
+
 ];

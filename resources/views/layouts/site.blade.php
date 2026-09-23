@@ -17,7 +17,7 @@
 @endif
 <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body data-checkout-url="{{ route('checkout.intent') }}">
+<body data-checkout-url="{{ route('checkout.intent') }}" data-package-purchase-url="{{ route('api.packages.purchase') }}">
 
 <!-- ============ HEADER ============ -->
 <header id="top" class="scrolled">

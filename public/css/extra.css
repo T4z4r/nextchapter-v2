@@ -26,3 +26,43 @@
 .cta-final .flash-banner.err,.cta-final .flash-banner.ok{text-align:center}
 
 @media (max-width:680px){.form-grid{grid-template-columns:1fr}}
+
+/* Checkout option page */
+.checkout-page{background:var(--paper)}
+.checkout-hero{padding-top:94px}
+.checkout-grid{display:grid;grid-template-columns:1fr 420px;gap:54px;align-items:start}
+.checkout-copy h1{font-size:clamp(38px,4.6vw,58px);margin:18px 0 12px}
+.checkout-copy .lede{max-width:34em;color:var(--muted);font-size:18px}
+.checkout-duration{font-family:'Spline Sans Mono';font-size:13px;color:var(--pine);margin-bottom:18px}
+.back-link{display:inline-flex;margin-bottom:28px;font-size:14px;color:var(--muted);font-weight:600}
+.back-link:hover{color:var(--pine)}
+.checkout-panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow-lg);position:sticky;top:98px}
+.checkout-summary{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:22px}
+.checkout-summary .pk{font-family:'Spline Sans Mono';font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--pine)}
+.checkout-summary h2{font-size:24px;margin:10px 0 10px}
+.checkout-price{display:flex;align-items:baseline;gap:5px;margin-bottom:6px}
+.checkout-price span{font-family:'Exo 2';font-size:24px;color:var(--pine)}
+.checkout-price strong{font-family:'Exo 2';font-size:46px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
+.checkout-summary p,.checkout-note{font-size:13.5px;color:var(--muted);line-height:1.45}
+.checkout-options{display:grid;gap:12px;margin-bottom:20px}
+.checkout-option{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:#fff;transition:border-color .15s,box-shadow .15s}
+.checkout-option:has(input:checked){border-color:var(--honey);box-shadow:0 0 0 1px var(--honey)}
+.checkout-option input{width:18px;height:18px;accent-color:var(--honey)}
+.checkout-option span{display:flex;justify-content:space-between;align-items:center;gap:14px;width:100%}
+.checkout-option strong{font-size:15.5px}
+.checkout-option small{font-family:'Spline Sans Mono';font-size:12px;color:var(--pine)}
+.checkout-field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.checkout-field label{font-family:'Spline Sans Mono';font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.checkout-field input{font-family:'Hanken Grotesk';font-size:16px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+.checkout-field input:focus{outline:none;border-color:var(--honey)}
+.checkout-submit{width:100%;margin-bottom:14px}
+.checkout-message{border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:14.5px;border:1px solid #D95B47;background:#FCEDEA;color:#7C2D1E}
+.checkout-details{padding-top:0}
+.checkout-detail-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:32px}
+.checkout-details h2{font-size:26px;margin-bottom:18px}
+.checkout-features{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+.checkout-features li{display:flex;gap:10px;font-size:15px;color:var(--ink)}
+.checkout-features svg{width:18px;height:18px;flex:none;margin-top:3px;stroke:var(--honey-deep);fill:none;stroke-width:2.4}
+.checkout-help{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px}
+.checkout-help p{color:var(--muted);font-size:15.5px;margin-bottom:18px}
+@media (max-width:900px){.checkout-grid,.checkout-detail-grid{grid-template-columns:1fr}.checkout-panel{position:static}.checkout-features{grid-template-columns:1fr}}

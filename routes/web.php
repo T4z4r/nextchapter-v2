@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\TutorialController;
 use App\Http\Controllers\Admin\ValueController;
 use App\Http\Controllers\Admin\VisitController;
+use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -25,8 +26,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/legal', [HomeController::class, 'legal'])->name('legal');
+Route::get('/checkout/{package}', [HomeController::class, 'checkout'])->name('checkout.options');
 Route::post('/enquiries', [EnquiryController::class, 'store'])->name('enquiries.store');
 Route::post('/checkout-intent', [EnquiryController::class, 'checkoutIntent'])->name('checkout.intent');
+
+Route::prefix('api')->group(function () {
+    Route::get('packages', [PackageController::class, 'index'])->name('api.packages.index');
+    Route::post('packages/purchase', [PackageController::class, 'purchase'])->name('api.packages.purchase');
+    Route::post('stripe/webhook', [PackageController::class, 'webhook'])->name('api.stripe.webhook');
+});
 
 /*
 |--------------------------------------------------------------------------

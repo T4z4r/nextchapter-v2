@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\EnsureAdmin::class,
         ]);
         $middleware->append(\App\Http\Middleware\TrackVisit::class);
+        $middleware->validateCsrfTokens(except: [
+            'api/packages/purchase',
+            'api/stripe/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
