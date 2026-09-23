@@ -11,7 +11,7 @@
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Back to pricing
         </a>
-        <span class="checkout-eyebrow">Secure checkout</span>
+        <span class="checkout-eyebrow">Private secure checkout</span>
         <h1><span>{{ $plan->name }}</span></h1>
         @if($plan->duration_label)
           <p class="checkout-duration">
@@ -19,7 +19,7 @@
             {{ $plan->duration_label }}
           </p>
         @endif
-        <p class="lede">Choose how this package will be billed, enter your email, and continue to Stripe to complete payment.</p>
+        <p class="lede">Reserve your package with a calm, protected checkout experience. Choose your billing option, confirm your email, and continue securely through Stripe.</p>
 
         <div class="checkout-trust" aria-label="Checkout assurances">
           <div class="checkout-trust-item">
@@ -44,12 +44,12 @@
             <span class="pk">{{ $plan->tier_label }}</span>
             <span class="checkout-summary-status">
               <span class="checkout-summary-status-dot" aria-hidden="true"></span>
-              Ready to checkout
+              Protected session
             </span>
           </div>
           <h2>{{ $plan->name }}</h2>
           <div class="checkout-price">
-            <span class="checkout-currency">£</span>
+            <span class="checkout-currency">&pound;</span>
             <strong id="checkoutAmount"
               data-ind="{{ number_format($plan->price_ind) }}"
               data-joint="{{ number_format($plan->price_joint) }}">{{ number_format($plan->priceFor($selectedMode)) }}</strong>
@@ -64,14 +64,14 @@
             <input type="radio" name="billing_variant" value="individual" {{ $selectedMode === 'individual' ? 'checked' : '' }}>
             <span class="checkout-option-body">
               <span>Individual</span>
-              <strong>£{{ number_format($plan->price_ind) }}</strong>
+              <strong>&pound;{{ number_format($plan->price_ind) }}</strong>
             </span>
           </label>
           <label class="checkout-option">
             <input type="radio" name="billing_variant" value="joint" {{ $selectedMode === 'joint' ? 'checked' : '' }}>
             <span class="checkout-option-body">
               <span>Joint application</span>
-              <strong>£{{ number_format($plan->price_joint) }}</strong>
+              <strong>&pound;{{ number_format($plan->price_joint) }}</strong>
             </span>
           </label>
         </div>
