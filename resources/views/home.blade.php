@@ -267,7 +267,7 @@
               </li>
             @endforeach
           </ul>
-          <button class="btn {{ $plan->featured ? 'btn-primary' : 'btn-ghost' }} buy" data-package="{{ $plan->slug }}" data-checkout-page="{{ route('checkout.options', $plan->slug) }}">{{ $plan->cta_label }}</button>
+          <a href="{{ route('checkout.options', ['package' => $plan->slug, 'billing_variant' => 'individual']) }}" class="btn {{ $plan->featured ? 'btn-primary' : 'btn-ghost' }} buy" data-package="{{ $plan->slug }}" data-checkout-page="{{ route('checkout.options', $plan->slug) }}">{{ $plan->cta_label }}</a>
         </div>
       @endforeach
     </div>

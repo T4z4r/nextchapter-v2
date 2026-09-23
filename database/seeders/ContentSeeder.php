@@ -271,6 +271,7 @@ class ContentSeeder extends Seeder
         }
 
         Plan::query()->truncate();
+        /*
         Plan::query()->insert([
             [
                 'sort' => 1, 'slug' => 'tier-1-diy-navigator', 'tier_label' => 'Tier 1',
@@ -304,6 +305,7 @@ class ContentSeeder extends Seeder
             ],
         ]);
 
+        */
         Addon::query()->truncate();
         Addon::query()->insert([
             [

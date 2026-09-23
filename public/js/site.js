@@ -139,7 +139,11 @@ async function startCheckout(pkg, mode) {
 }
 
 document.querySelectorAll('.buy').forEach(b => {
-  b.addEventListener('click', async () => {
+  b.addEventListener('click', async e => {
+    if (b.dataset.checkoutPage) {
+      e.preventDefault();
+    }
+
     const original = b.textContent;
     b.disabled = true;
     b.textContent = 'Starting checkout...';
