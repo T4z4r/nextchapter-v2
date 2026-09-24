@@ -62,7 +62,7 @@ class HomePageTest extends TestCase
             ->assertSee('data-joint="' . number_format($plan->price_joint) . '"', false);
     }
 
-    public function test_pricing_grid_is_scrollable_when_more_than_three_plans_are_active(): void
+    public function test_pricing_grid_wraps_when_more_than_three_plans_are_active(): void
     {
         $this->seedSite();
 
@@ -83,8 +83,9 @@ class HomePageTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('class="price-grid scrollable"', false)
-            ->assertSee('aria-label="Scrollable pricing packages"', false);
+            ->assertSee('class="price-grid"', false)
+            ->assertDontSee('class="price-grid scrollable"', false)
+            ->assertDontSee('aria-label="Scrollable pricing packages"', false);
     }
 
     public function test_tutorial_lock_state_renders(): void

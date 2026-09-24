@@ -241,7 +241,7 @@
     </div>
     @endif
 
-    <div class="price-grid{{ count($plans) > 3 ? ' scrollable' : '' }}" @if(count($plans) > 3) tabindex="0" aria-label="Scrollable pricing packages" @endif>
+    <div class="price-grid">
       @foreach($plans as $plan)
         <div class="plan{{ $plan->featured ? ' featured' : '' }}">
           @if($plan->badge)<span class="flag">{{ $plan->badge }}</span>@endif
