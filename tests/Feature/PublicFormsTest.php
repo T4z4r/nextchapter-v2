@@ -155,6 +155,8 @@ class PublicFormsTest extends TestCase
 
     public function test_api_webhook_records_completed_checkout_in_testing_without_signature(): void
     {
+        config(['services.packages.remote_registration_token' => null]);
+
         $this->postJson(route('api.stripe.webhook'), [
             'id' => 'evt_test_checkout_completed',
             'type' => 'checkout.session.completed',
@@ -177,5 +179,77 @@ class PublicFormsTest extends TestCase
             'package_interest' => 'tier-2-standard',
             'billing_mode' => 'individual',
         ]);
+    }
+
+    public function test_api_webhook_creates_remote_account_after_completed_checkout(): void
+    {
+        config([
+            'services.packages.remote_account_url' => 'https://balancepoint.uk/api/remote/accounts',
+            'services.packages.remote_registration_token' => 'secret-token',
+        ]);
+
+        Http::fake([
+            'https://balancepoint.uk/api/remote/accounts' => Http::response([
+                'message' => 'Account created and credentials notification sent.',
+                'data' => [
+                    'id' => 'user-uuid',
+                    'email' => 'client@example.test',
+                    'login_url' => 'https://platform.example.com/login',
+                ],
+            ]),
+        ]);
+
+        $this->postJson(route('api.stripe.webhook'), [
+            'id' => 'evt_test_checkout_completed',
+            'type' => 'checkout.session.completed',
+            'data' => [
+                'object' => [
+                    'id' => 'cs_test_123',
+                    'payment_intent' => 'pi_test_123',
+                    'customer_details' => [
+                        'email' => 'client@example.test',
+                        'name' => 'Jane Smith',
+                    ],
+                    'metadata' => [
+                        'package_slug' => 'tier-2-standard',
+                        'billing_variant' => 'individual',
+                    ],
+                ],
+            ],
+        ])->assertOk()->assertJsonPath('received', true);
+
+        Http::assertSent(fn ($request) => $request->url() === 'https://balancepoint.uk/api/remote/accounts'
+            && $request->hasHeader('Authorization', 'Bearer secret-token')
+            && $request['name'] === 'Jane Smith'
+            && $request['display_name'] === 'Jane'
+            && $request['email'] === 'client@example.test');
+    }
+
+    public function test_api_webhook_skips_remote_account_creation_without_configuration(): void
+    {
+        config([
+            'services.packages.remote_account_url' => null,
+            'services.packages.remote_registration_token' => null,
+        ]);
+
+        Http::fake();
+
+        $this->postJson(route('api.stripe.webhook'), [
+            'id' => 'evt_test_checkout_completed',
+            'type' => 'checkout.session.completed',
+            'data' => [
+                'object' => [
+                    'id' => 'cs_test_123',
+                    'payment_intent' => 'pi_test_123',
+                    'customer_email' => 'client@example.test',
+                    'metadata' => [
+                        'package_slug' => 'tier-2-standard',
+                        'billing_variant' => 'individual',
+                    ],
+                ],
+            ],
+        ])->assertOk()->assertJsonPath('received', true);
+
+        Http::assertNothingSent();
     }
 }

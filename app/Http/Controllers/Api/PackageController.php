@@ -115,10 +115,11 @@ class PackageController extends Controller
 
         if (($payload['type'] ?? null) === 'checkout.session.completed') {
             $session = $payload['data']['object'] ?? [];
+            $email = $session['customer_details']['email'] ?? $session['customer_email'] ?? null;
 
             ContactMessage::create([
                 'type' => 'checkout',
-                'email' => $session['customer_email'] ?? null,
+                'email' => $email,
                 'package_interest' => $session['metadata']['package_slug'] ?? null,
                 'billing_mode' => $session['metadata']['billing_variant'] ?? null,
                 'message' => sprintf(
@@ -127,6 +128,10 @@ class PackageController extends Controller
                     $session['payment_intent'] ?? 'unknown'
                 ),
             ]);
+
+            if ($email) {
+                $this->createRemoteAccount($email, $session);
+            }
         }
 
         return response()->json(['received' => true]);
@@ -153,5 +158,51 @@ class PackageController extends Controller
         $expected = hash_hmac('sha256', $timestamp[1] . '.' . $request->getContent(), $secret);
 
         return hash_equals($expected, $hash[1]);
+    }
+
+    /**
+     * @param array<string, mixed> $session
+     */
+    private function createRemoteAccount(string $email, array $session): void
+    {
+        $url = config('services.packages.remote_account_url');
+        $token = config('services.packages.remote_registration_token');
+
+        if (! $url || ! $token) {
+            Log::warning('Remote account creation skipped because BalancePoint registration is not configured.', [
+                'session_id' => $session['id'] ?? null,
+                'email' => $email,
+            ]);
+
+            return;
+        }
+
+        $name = $session['customer_details']['name'] ?? $session['customer_name'] ?? $this->nameFromEmail($email);
+
+        $response = Http::acceptJson()
+            ->asJson()
+            ->withToken($token)
+            ->timeout(20)
+            ->post($url, [
+                'name' => $name,
+                'email' => $email,
+                'display_name' => strtok($name, ' ') ?: null,
+            ]);
+
+        if ($response->failed()) {
+            Log::warning('Remote BalancePoint account creation failed.', [
+                'status' => $response->status(),
+                'body' => $response->json(),
+                'session_id' => $session['id'] ?? null,
+                'email' => $email,
+            ]);
+        }
+    }
+
+    private function nameFromEmail(string $email): string
+    {
+        $localPart = str($email)->before('@')->replace(['.', '_', '-'], ' ')->squish()->title()->toString();
+
+        return $localPart ?: $email;
     }
 }

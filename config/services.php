@@ -45,6 +45,8 @@ return [
     'packages' => [
         'url' => env('PACKAGES_API_URL', 'https://balancepoint.uk/api/packages'),
         'purchase_url' => env('PACKAGES_PURCHASE_API_URL', 'https://balancepoint.uk/api/packages/purchase'),
+        'remote_account_url' => env('BALANCEPOINT_REMOTE_ACCOUNT_URL', 'https://balancepoint.uk/api/remote/accounts'),
+        'remote_registration_token' => env('BALANCEPOINT_REMOTE_REGISTRATION_TOKEN'),
         'auto_sync' => env('PACKAGES_AUTO_SYNC', true),
         'sync_ttl' => env('PACKAGES_SYNC_TTL', 900),
         'delete_stale' => env('PACKAGES_DELETE_STALE', true),
